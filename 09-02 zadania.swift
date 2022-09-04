@@ -1,3 +1,6 @@
+//EXERCISES: https://mendela.pl/3mob/
+//access 02.09.22
+
 //1a
 print("---1a---");
 for i in -22...21{
