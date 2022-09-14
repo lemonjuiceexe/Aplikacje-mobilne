@@ -15,30 +15,40 @@ let map = [];
 
 let game = {
     readInput : () => {
-        x = rEl.value; y = cEl.value;
+        y = rEl.value; x = cEl.value;
         mines = mEl.value;
-        for(let i = 0; i < x; i++){
+        x++; y++;
+        for(let i = 0; i < y - 1; i++){
             map[i] = [];
+            // for(let j = 0; j < x - 1; j++){
+            //     map[i][j] = new Box();
+            // }
         }
+        console.log(map);
         //Resize canvas
         canvas.width = x * boxSize; 
         canvas.height = y * boxSize;
     },
     generateMap : () => {
+        //Generate mines
         let mineCount = 0;
         while(mineCount < mines){
-            let a = Math.floor(Math.random() * x);
-            let b = Math.floor(Math.random() * y);
+            let a = Math.floor(Math.random() * (y - 1));
+            let b = Math.floor(Math.random() * (x - 1));
+            console.log(a, b);
             if(map[a][b] && map[a][b].mine){
                 continue;
             }
-            map[a][b] = new Box();
+             map[a][b] = new Box();
             map[a][b].mine = true;
             mineCount++;
         }
+
         ctx.strokeStyle = "#000000";
         ctx.fillStyle = "#ff0000";
         console.log(map);
+
+        //Draw the map
         let i = 0, j = 0;
         for(let drawI = margin; drawI < canvas.getAttribute("height") - (2 * margin) + 1; drawI += boxSize){
             for(let drawJ = margin; drawJ < canvas.getAttribute("width") - (2 * margin) + 1; drawJ += boxSize){
@@ -46,10 +56,12 @@ let game = {
                 if(map[i][j] != undefined && map[i][j].mine){
                     ctx.fillRect(drawJ, drawI, boxSize, boxSize);
                 }
+                j++;
             }
-            j++;
+            j = 0;
+            i++;
         }
-        i++;
+        //
     }
 }
 
