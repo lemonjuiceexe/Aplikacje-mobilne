@@ -20,11 +20,11 @@ let game = {
         x++; y++;
         for(let i = 0; i < y - 1; i++){
             map[i] = [];
-            // for(let j = 0; j < x - 1; j++){
-            //     map[i][j] = new Box();
-            // }
+            for(let j = 0; j < x - 1; j++){
+                map[i][j] = new Box(j, i);
+                console.log(map[i][j].neighbours());
+            }
         }
-        console.log(map);
         //Resize canvas
         canvas.width = x * boxSize; 
         canvas.height = y * boxSize;
@@ -36,10 +36,10 @@ let game = {
             let a = Math.floor(Math.random() * (y - 1));
             let b = Math.floor(Math.random() * (x - 1));
             console.log(a, b);
-            if(map[a][b] && map[a][b].mine){
+            if(/*map[a][b] && */map[a][b].mine){
                 continue;
             }
-             map[a][b] = new Box();
+            // map[a][b] = new Box();
             map[a][b].mine = true;
             mineCount++;
         }
@@ -53,7 +53,7 @@ let game = {
         for(let drawI = margin; drawI < canvas.getAttribute("height") - (2 * margin) + 1; drawI += boxSize){
             for(let drawJ = margin; drawJ < canvas.getAttribute("width") - (2 * margin) + 1; drawJ += boxSize){
                 ctx.strokeRect(drawJ, drawI, boxSize, boxSize);
-                if(map[i][j] != undefined && map[i][j].mine){
+                if(/*map[i][j] != undefined && */map[i][j].mine){
                     ctx.fillRect(drawJ, drawI, boxSize, boxSize);
                 }
                 j++;
@@ -71,7 +71,24 @@ sbm.addEventListener("click", () => {
 });
 
 class Box{
+    constructor(x, y){
+        this.boxX = x;
+        this.boxY = y;
+    }
     mine = false;
     hidden = true;
     color = "#ffffff";
+
+    click = () => {
+        hidden = false;
+
+    }
+    neighbours = () => {
+        //Edge tiles
+        if(this.boxX == 0 || this.boxY == 0 || this.boxX == x || this.boxY == y){
+            return "edge";
+        }
+        //Normal tiles
+        return "normal"
+    }
 }
