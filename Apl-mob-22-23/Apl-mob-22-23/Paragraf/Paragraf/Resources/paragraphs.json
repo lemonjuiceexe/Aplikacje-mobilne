@@ -1,0 +1,11 @@
+{
+    "1" : {
+        "prompt" : "This is page number 1",
+        "optionsCount" : 3,
+        "options" : [
+            "To jest opcja nr. 1",
+            "To jest opcja nr. 2",
+            "To jest opcja nr. 3"
+        ]
+    }
+}

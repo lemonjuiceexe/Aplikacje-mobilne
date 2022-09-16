@@ -6,8 +6,12 @@
 	objectVersion = 55;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		012A574828D462A0003B6F72 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 012A574728D462A0003B6F72 /* main.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
-		01A0429F28CB26D30064B922 /* CopyFiles */ = {
+		012A574228D462A0003B6F72 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -19,12 +23,13 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		012A573A28D46140003B6F72 /* Apl-mob-22-23 */ = {isa = PBXFileReference; lastKnownFileType = folder; path = "Apl-mob-22-23"; sourceTree = "<group>"; };
-		01A042A128CB26D30064B922 /* Apl-mob-22-23 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Apl-mob-22-23"; sourceTree = BUILT_PRODUCTS_DIR; };
+		012A574428D462A0003B6F72 /* Paragraf */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Paragraf; sourceTree = BUILT_PRODUCTS_DIR; };
+		012A574728D462A0003B6F72 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		012A574F28D46890003B6F72 /* Resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		01A0429E28CB26D30064B922 /* Frameworks */ = {
+		012A574128D462A0003B6F72 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -34,58 +39,67 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		01A0429828CB26D30064B922 = {
+		012A573B28D462A0003B6F72 = {
 			isa = PBXGroup;
 			children = (
-				012A573A28D46140003B6F72 /* Apl-mob-22-23 */,
-				01A042A228CB26D30064B922 /* Products */,
+				012A574628D462A0003B6F72 /* Paragraf */,
+				012A574528D462A0003B6F72 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		01A042A228CB26D30064B922 /* Products */ = {
+		012A574528D462A0003B6F72 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				01A042A128CB26D30064B922 /* Apl-mob-22-23 */,
+				012A574428D462A0003B6F72 /* Paragraf */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		012A574628D462A0003B6F72 /* Paragraf */ = {
+			isa = PBXGroup;
+			children = (
+				012A574728D462A0003B6F72 /* main.swift */,
+				012A574F28D46890003B6F72 /* Resources */,
+			);
+			path = Paragraf;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		01A042A028CB26D30064B922 /* Apl-mob-22-23 */ = {
+		012A574328D462A0003B6F72 /* Paragraf */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 01A042A828CB26D30064B922 /* Build configuration list for PBXNativeTarget "Apl-mob-22-23" */;
+			buildConfigurationList = 012A574B28D462A0003B6F72 /* Build configuration list for PBXNativeTarget "Paragraf" */;
 			buildPhases = (
-				01A0429D28CB26D30064B922 /* Sources */,
-				01A0429E28CB26D30064B922 /* Frameworks */,
-				01A0429F28CB26D30064B922 /* CopyFiles */,
+				012A574028D462A0003B6F72 /* Sources */,
+				012A574128D462A0003B6F72 /* Frameworks */,
+				012A574228D462A0003B6F72 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = "Apl-mob-22-23";
-			productName = "Apl-mob-22-23";
-			productReference = 01A042A128CB26D30064B922 /* Apl-mob-22-23 */;
+			name = Paragraf;
+			productName = Paragraf;
+			productReference = 012A574428D462A0003B6F72 /* Paragraf */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		01A0429928CB26D30064B922 /* Project object */ = {
+		012A573C28D462A0003B6F72 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
 				LastUpgradeCheck = 1340;
 				TargetAttributes = {
-					01A042A028CB26D30064B922 = {
+					012A574328D462A0003B6F72 = {
 						CreatedOnToolsVersion = 13.4.1;
 					};
 				};
 			};
-			buildConfigurationList = 01A0429C28CB26D30064B922 /* Build configuration list for PBXProject "Apl-mob-22-23" */;
+			buildConfigurationList = 012A573F28D462A0003B6F72 /* Build configuration list for PBXProject "Paragraf" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -93,28 +107,29 @@
 				en,
 				Base,
 			);
-			mainGroup = 01A0429828CB26D30064B922;
-			productRefGroup = 01A042A228CB26D30064B922 /* Products */;
+			mainGroup = 012A573B28D462A0003B6F72;
+			productRefGroup = 012A574528D462A0003B6F72 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				01A042A028CB26D30064B922 /* Apl-mob-22-23 */,
+				012A574328D462A0003B6F72 /* Paragraf */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		01A0429D28CB26D30064B922 /* Sources */ = {
+		012A574028D462A0003B6F72 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				012A574828D462A0003B6F72 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		01A042A628CB26D30064B922 /* Debug */ = {
+		012A574928D462A0003B6F72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -174,7 +189,7 @@
 			};
 			name = Debug;
 		};
-		01A042A728CB26D30064B922 /* Release */ = {
+		012A574A28D462A0003B6F72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -227,7 +242,7 @@
 			};
 			name = Release;
 		};
-		01A042A928CB26D30064B922 /* Debug */ = {
+		012A574C28D462A0003B6F72 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -236,7 +251,7 @@
 			};
 			name = Debug;
 		};
-		01A042AA28CB26D30064B922 /* Release */ = {
+		012A574D28D462A0003B6F72 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
@@ -248,25 +263,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		01A0429C28CB26D30064B922 /* Build configuration list for PBXProject "Apl-mob-22-23" */ = {
+		012A573F28D462A0003B6F72 /* Build configuration list for PBXProject "Paragraf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01A042A628CB26D30064B922 /* Debug */,
-				01A042A728CB26D30064B922 /* Release */,
+				012A574928D462A0003B6F72 /* Debug */,
+				012A574A28D462A0003B6F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		01A042A828CB26D30064B922 /* Build configuration list for PBXNativeTarget "Apl-mob-22-23" */ = {
+		012A574B28D462A0003B6F72 /* Build configuration list for PBXNativeTarget "Paragraf" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				01A042A928CB26D30064B922 /* Debug */,
-				01A042AA28CB26D30064B922 /* Release */,
+				012A574C28D462A0003B6F72 /* Debug */,
+				012A574D28D462A0003B6F72 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 01A0429928CB26D30064B922 /* Project object */;
+	rootObject = 012A573C28D462A0003B6F72 /* Project object */;
 }
