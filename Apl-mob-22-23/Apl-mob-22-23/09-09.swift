@@ -69,6 +69,7 @@ func ex2(){
     }
     else if((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 2
     || ((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 3)){
+
         century = "20";
     }
     else if((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 4
