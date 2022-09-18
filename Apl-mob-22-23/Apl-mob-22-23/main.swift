@@ -68,7 +68,7 @@ func ex2(){
         century = "19";
     }
     else if((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 2
-    ||((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 3){
+    || ((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 3)){
         century = "20";
     }
     else if((p[p.index(p.startIndex, offsetBy: 2)].wholeNumberValue ?? 0) == 4
@@ -108,6 +108,7 @@ func ex2(){
     
     //print("Urodzony/a " + day + "." + month + "." + year)
     print(year + month + day);
+    print("new");
 }
 
 ex2()
