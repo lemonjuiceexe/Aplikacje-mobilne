@@ -1,11 +1,30 @@
 {
+    "0" : {
+        "prompt": "This is the intrudoctory prompt.",
+        "optionsCount": 1,
+        "options": [
+            {
+                "body": "Go to page number 1",
+                "leadsTo": "1"
+            }
+        ]
+    },
     "1" : {
         "prompt" : "This is page number 1",
         "optionsCount" : 3,
         "options" : [
-            "To jest opcja nr. 1",
-            "To jest opcja nr. 2",
-            "To jest opcja nr. 3"
+            {
+                "body": "To jest opcja nr. 1",
+                "leadsTo": "4" 
+            },
+            {
+                "body": "To jest opcja nr. 2",
+                "leadsTo": "5" 
+            },
+            {
+                "body": "To jest opcja nr. 3",
+                "leadsTo": "6" 
+            }
         ]
     }
 }

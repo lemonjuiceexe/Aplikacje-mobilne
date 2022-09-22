@@ -1,11 +1,16 @@
-var current = 0
+import Foundation
 
-//Print the prompt and read output
-print("This is the first prompt. \n 1. A\n 2. B");
-var answer = readLine() ?? "1";
-if(answer == ""){
-    answer = "1";
+var current = "0";
+let dictionary = readJSON(p: "paragraphs");
+
+print(dictionary[current]);
+print("achavfdsgufutg");
+
+func readJSON(p: String) -> String{
+    let path = Bundle.main.path(forResource: "Resources/" + p, ofType: "json") ?? "";
+    let json = JSONSerialization.jsonObject(with: Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe), options: []);
+    guard let dictionary = json as? [String: Any] else {
+        return "";
+    }
+    return dictionary;
 }
-
-
-print(answer);
