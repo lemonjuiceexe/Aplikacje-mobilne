@@ -1,11 +1,19 @@
 {
     "1" : {
         "prompt" : "This is page number 1",
-        "optionsCount" : 3,
         "options" : [
-            "To jest opcja nr. 1",
-            "To jest opcja nr. 2",
-            "To jest opcja nr. 3"
+            {
+                "prompt" : "To jest opcja nr. 1",
+                "leadsTo" : "4"
+            },
+            {
+                "prompt" : "To jest opcja nr. 2",
+                "leadsTo" : "5"
+            },
+            {
+                "prompt" : "To jest opcja nr. 3",
+                "leadsTo" : "4"
+            }
         ]
     }
 }
