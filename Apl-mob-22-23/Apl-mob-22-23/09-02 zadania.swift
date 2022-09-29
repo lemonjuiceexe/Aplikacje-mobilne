@@ -11,11 +11,12 @@ print("---1b---");
 do{
     var i = 55;
     while i > -15{
-        print(i);
+        print(i, terminator: " ");
         i -= 5;
     }
 }
 //1c
+print(" ");
 print("---1c---");
 do {
     var i = 40;
