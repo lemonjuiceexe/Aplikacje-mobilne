@@ -8,8 +8,12 @@ for i in -22...21{
 }
 //1b
 print("---1b---");
-for i in stride(from: -14, through: 55, by: 5){
-    print(i, terminator: " ");
+do{
+    var i = 55;
+    while i > -15{
+        print(i);
+        i -= 5;
+    }
 }
 //1c
 print("---1c---");
@@ -23,6 +27,7 @@ do {
     }
 }
 //1d
+print(" ");
 print("---1d---");
 do {
     var i = -40;
@@ -35,10 +40,11 @@ do {
     }
 }
 //1e
+print(" ");
 print("---1e---");
 do {
     var i = -20;
-    while i <= 20 {
+    while i < 20 {
         if (i <= 5 || i >= 10)
         && i % 2 == 0{
             print(i, terminator: " ");
@@ -47,6 +53,7 @@ do {
     }
 }
 //1f
+print(" ");
 print("---1f---");
 do {
     var i = -100;
@@ -60,6 +67,7 @@ do {
 }
 do{
 //2
+    print("Podaj liczbe");
     var x = Int(readLine()!)!;
     print("---2a---");
     do{
