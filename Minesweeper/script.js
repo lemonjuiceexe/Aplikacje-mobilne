@@ -62,9 +62,7 @@ let game = {
             // map[a][b] = new Box();
             map[a][b].mine = true;
             mineCount++;
-            // console.log(map[a][b].neighbours());
-            // minesArray.push(map[a][b]);
-            map[a][b].neighbours().forEach(el => { console.log("dodaje piwo"); mineNeighbours.push(el); });
+            map[a][b].neighbours().forEach(el => mineNeighbours.push(el));
         }
         //Draw the map
         //Background
@@ -85,12 +83,6 @@ let game = {
             j = 0;
             i++;
         }
-        //
-        for(let i = 0; i < mineNeighbours.length; i++){
-            console.log("kocham piwo");
-            mineNeighbours[i].color(game.colors["mine-neighbour"]);
-        }
-        
     }
 }
 
@@ -113,7 +105,7 @@ canvas.addEventListener("click", (e) => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
     else{
-        map[y][x].revealNeighbours();
+        map[y][x].click();
     }
 });
 
@@ -133,29 +125,34 @@ class Box{
     }
 
     click = () => {
-        this.hidden = false;
-        this.color(game.colors.revealed);
+        this.color(mineNeighbours.includes(this) ? game.colors["mine-neighbour"] : game.colors.revealed);
+        //Stop if the box is numbered
+        if(mineNeighbours.includes(this)){ return; }
+        this.revealNeighbours();
     }
 
     revealNeighbours = () => {
-        let neighbouring = this.neighbours()/*.filter(box => !box.mine)*/;
-        
-        // neighbouring = neighbouring.filter(box => !mineNeighbours.includes(box));
-        // console.log(mineNeighbours);
-        if(neighbouring.count == 0 || neighbouring.includes(box => box.mine)){
+        //Mark the box as revealed
+        if(!this.hidden) { return; }
+        else { this.hidden = false; }
+
+        //Recursively check all the neighbours
+        let neighbouring = this.neighbours();
+        if(neighbouring.count == 0){
             return;
-        }
-        // console.log(neighbouring);
+        }        
         neighbouring.forEach((box) => {
-            let tempColor = (box.neighbours().includes(neighbour => neighbour.mine ? game.colors["mine-neighbour"] : game.colors.revealed));
-            box.hidden = false;
-            box.color(tempColor);
-            if(!box.neighbours().includes(neighbour => neighbour.mine)){
-                box.revealNeighbours();
-            }
+            //Don't check the same box more than once
+            if(!box.hidden){ return; }
+            //Don't reveal a mine
+            if(box.mine){ return; }
+            //Color both normal and numbered squares
+            box.color(mineNeighbours.includes(box) ? game.colors["mine-neighbour"] : game.colors.revealed);
+            //The reveal always ends on a numbered square
+            if(mineNeighbours.includes(box)){ return; }
+            //Reveal normal squares
+            box.revealNeighbours();
         });
-        
-        return "normal";
     }
 
     //Return the eight neighbouring boxes
