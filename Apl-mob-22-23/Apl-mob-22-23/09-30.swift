@@ -13,10 +13,11 @@ func Ex1(value: Array<Any>) -> Array<Int>{
 }
 
 //your own little parser from readLine to Array<Any>
-func ParseArray(value: String) -> /*Array<Any>*/ String{
-    var result = value;
-    // result.remove(at: result.startIndex); result.remove(at: result.endIndex); //remove first and last character - '[' and ']'
+func ParseArray(value: String) -> Array<Any>{
+    var r = value;
+    r = r.replacingOccurrences(of: "[", with: ""); r = r.replacingOccurrences(of: "]", with: ""); 
 
+    var result = r.components(separatedBy: ","); //TODO: problem if string in array contains ','
     return result;
 }
 
