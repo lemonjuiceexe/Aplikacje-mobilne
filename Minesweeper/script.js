@@ -86,14 +86,46 @@ let game = {
             j = 0;
             i++;
         }
+    },
+
+    revealTheMap : () => { 
+        allTiles.forEach(tile => {
+            let _color;
+            if(tile.mine){ 
+                _color = game.colors.mine;
+            }
+            else if(tile.hidden){
+                _color = game.colors.hidden;
+            }
+            else{
+                _color = game.colors.revealed;
+            }
+            tile.color(_color);
+        });
+    },
+
+    checkWin : () => {
+        let revealed = allTiles.filter(el => !el.hidden);
+        if(revealed.length == allTiles.length - mines){
+            game.revealTheMap();
+            alert("You win!");
+        }
+    },
+
+    restart : () => { 
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        game.clearVars();
+        game.readInput();
+        game.generateMap();
     }
 }
 
 //Submit button
 sbm.addEventListener("click", () => {
-    game.clearVars();
-    game.readInput();
-    game.generateMap();
+    game.restart();
+    // game.clearVars();
+    // game.readInput();
+    // game.generateMap();
 });
 //Clicking on canvas
 canvas.addEventListener("click", (e) => {
@@ -106,8 +138,13 @@ canvas.addEventListener("click", (e) => {
     map[y][x].click();
     // When mine clicked
     if(map[y][x].mine && !firstClick){
+        //Reveal the map
+        game.revealTheMap();
         alert("Game Over");
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        //TODO: Clear the map after some input
+        // ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // setTimeout(game.restart(), 5000);
+        return;
     }
     // Regenerate if first click is a mine
     else if(firstClick){
@@ -119,6 +156,8 @@ canvas.addEventListener("click", (e) => {
         firstClick = false;
         map[y][x].click();
     }
+
+    game.checkWin();
 });
 //Right click
 canvas.addEventListener("contextmenu", (e) => { 
@@ -143,7 +182,7 @@ class Box{
     color = (c) => {
         this.colorHex = c;
         ctx.fillStyle = c;
-        // +1 and -1 are to compensate for the border
+        // +1 and -2 are to compensate for the border
         ctx.fillRect(this.boxX * boxSize + margin + 1, this.boxY * boxSize + margin + 1, boxSize - 2, boxSize - 2);
     }
 
@@ -155,9 +194,11 @@ class Box{
         else{ 
             this.colorNumbered();
         }
-        // this.hidden = false;
         //Stop if the box is numbered
-        if(mineNeighbours.includes(this)){ return; }
+        if(mineNeighbours.includes(this)){ 
+            this.hidden = false;
+            return;
+        }
         this.revealNeighbours();
     }
 
@@ -181,6 +222,7 @@ class Box{
                 box.color(game.colors.revealed);
             }
             else{ 
+                box.hidden = false;
                 box.colorNumbered();
             }
             //The reveal always ends on a numbered square
@@ -215,10 +257,8 @@ class Box{
         if(this.flag){
             this.color(game.colors.hidden);
             this.flag = false;
-            console.log("hahah");
         }
         else{
-            console.log("wzium");
             this.color(game.colors.flag);
             this.flag = true;
         }
