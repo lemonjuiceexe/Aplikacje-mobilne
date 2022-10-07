@@ -25,6 +25,7 @@ let game = {
         "revealed" : "#2891fa",
         "mine" : "#fa285c",
         "mine-neighbour" : "#ffa142",
+        "flag" : "#10c964",
     },
 
     //Functions
@@ -100,6 +101,8 @@ canvas.addEventListener("click", (e) => {
     let y = Math.floor((e.offsetY - margin) / boxSize);
     console.log(x, y);
     
+    if(map[y][x].flag) { return; }
+
     map[y][x].click();
     // When mine clicked
     if(map[y][x].mine && !firstClick){
@@ -117,20 +120,31 @@ canvas.addEventListener("click", (e) => {
         map[y][x].click();
     }
 });
+//Right click
+canvas.addEventListener("contextmenu", (e) => { 
+    e.preventDefault();
+    let x = Math.floor((e.offsetX - margin) / boxSize);
+    let y = Math.floor((e.offsetY - margin) / boxSize);
+    console.log(x, y);
+    map[y][x].flagToggle();
+});
 
 class Box{
     constructor(x, y){
         this.boxX = x;
         this.boxY = y;
         this.hidden = true;
+        this.flag = false;
     }
     mine = false;
+    
     colorHex = "#ffffff";
 
     color = (c) => {
         this.colorHex = c;
         ctx.fillStyle = c;
-        ctx.fillRect(this.boxX * boxSize + margin, this.boxY * boxSize + margin, boxSize, boxSize);
+        // +1 and -1 are to compensate for the border
+        ctx.fillRect(this.boxX * boxSize + margin + 1, this.boxY * boxSize + margin + 1, boxSize - 2, boxSize - 2);
     }
 
     //Color the box and reveal the neighbours if no mines are around
@@ -141,6 +155,7 @@ class Box{
         else{ 
             this.colorNumbered();
         }
+        // this.hidden = false;
         //Stop if the box is numbered
         if(mineNeighbours.includes(this)){ return; }
         this.revealNeighbours();
@@ -176,7 +191,7 @@ class Box{
     }
 
     //Return the eight neighbouring boxes
-    neighbours() {
+    neighbours = () => {
         return allTiles.filter((box) => {
                     //Not yet revealed and not the same box
             return box.hidden && !(box.boxX == this.boxX && box.boxY == this.boxY)
@@ -187,12 +202,25 @@ class Box{
         });
     }
     //Color the numbered box (count it's mine neighbours)
-    colorNumbered() {
+    colorNumbered = () => {
         let neighbouring = this.neighbours();
         let count = neighbouring.filter((box) => box.mine).length;
         this.color(game.colors["mine-neighbour"]);
         ctx.fillStyle = "#000000";
         ctx.font = "20px Arial";
         ctx.fillText(count, this.boxX * boxSize + margin + 5, this.boxY * boxSize + margin + 17);
+    }
+    flagToggle = () => {
+        if(!this.hidden) { return; }
+        if(this.flag){
+            this.color(game.colors.hidden);
+            this.flag = false;
+            console.log("hahah");
+        }
+        else{
+            console.log("wzium");
+            this.color(game.colors.flag);
+            this.flag = true;
+        }
     }
 }
