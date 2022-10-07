@@ -9,10 +9,11 @@ const sbm = document.querySelector("button");
 const margin = 10;
 const boxSize = 20;
 
+let firstClick = true;
+
 let x, y;
 let mines;
 let map = [];
-// let minesArray = [];
 let mineNeighbours = [];
 let allTiles = [];
 
@@ -31,7 +32,7 @@ let game = {
         map.length = 0;
         mineNeighbours.length = 0;
         allTiles.length = 0;
-        console.log("usuwam piwo");
+        firstClick = true;
     },
 
     //TODO: Validate input (mines < rows * cols)
@@ -75,9 +76,10 @@ let game = {
         for(let drawI = margin; drawI < canvas.getAttribute("height") - (2 * margin) + 1; drawI += boxSize){
             for(let drawJ = margin; drawJ < canvas.getAttribute("width") - (2 * margin) + 1; drawJ += boxSize){
                 ctx.strokeRect(drawJ, drawI, boxSize, boxSize);
-                if(/*map[i][j] != undefined && */map[i][j].mine){
-                    ctx.fillRect(drawJ, drawI, boxSize, boxSize);
-                }
+                // Color the mines
+                // if(/*map[i][j] != undefined && */map[i][j].mine){
+                //     ctx.fillRect(drawJ, drawI, boxSize, boxSize);
+                // }
                 j++;
             }
             j = 0;
@@ -100,11 +102,18 @@ canvas.addEventListener("click", (e) => {
     
     map[y][x].click();
     // When mine clicked
-    if(map[y][x].mine){
+    if(map[y][x].mine && !firstClick){
         alert("Game Over");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-    else{
+    // Regenerate if first click is a mine
+    else if(firstClick){
+        while(map[y][x].mine){
+            game.clearVars();
+            game.readInput();
+            game.generateMap();
+        }
+        firstClick = false;
         map[y][x].click();
     }
 });
@@ -124,6 +133,7 @@ class Box{
         ctx.fillRect(this.boxX * boxSize + margin, this.boxY * boxSize + margin, boxSize, boxSize);
     }
 
+    //Color the box and reveal the neighbours if no mines are around
     click = () => {
         if(!mineNeighbours.includes(this)){
             this.color(game.colors.revealed);
@@ -176,7 +186,7 @@ class Box{
                     && (box.boxY == this.boxY - 1 || box.boxY == this.boxY || box.boxY == this.boxY + 1));
         });
     }
-    //Count mines in neighbours and generate proper image
+    //Color the numbered box (count it's mine neighbours)
     colorNumbered() {
         let neighbouring = this.neighbours();
         let count = neighbouring.filter((box) => box.mine).length;
