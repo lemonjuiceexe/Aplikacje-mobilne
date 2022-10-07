@@ -1,5 +1,6 @@
-.exe
-.exp
-.lib
-.bat
-.vscode
+*.exe
+*.exp
+*.lib
+*.bat
+.vscode/
+.DS_Store/
