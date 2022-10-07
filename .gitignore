@@ -3,4 +3,4 @@
 *.lib
 *.bat
 .vscode/
-.DS_Store/
+.DS_Store
