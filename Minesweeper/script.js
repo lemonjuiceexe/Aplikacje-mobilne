@@ -125,7 +125,12 @@ class Box{
     }
 
     click = () => {
-        this.color(mineNeighbours.includes(this) ? game.colors["mine-neighbour"] : game.colors.revealed);
+        if(!mineNeighbours.includes(this)){
+            this.color(game.colors.revealed);
+        }
+        else{ 
+            this.colorNumbered();
+        }
         //Stop if the box is numbered
         if(mineNeighbours.includes(this)){ return; }
         this.revealNeighbours();
@@ -147,7 +152,12 @@ class Box{
             //Don't reveal a mine
             if(box.mine){ return; }
             //Color both normal and numbered squares
-            box.color(mineNeighbours.includes(box) ? game.colors["mine-neighbour"] : game.colors.revealed);
+            if(!mineNeighbours.includes(box)){
+                box.color(game.colors.revealed);
+            }
+            else{ 
+                box.colorNumbered();
+            }
             //The reveal always ends on a numbered square
             if(mineNeighbours.includes(box)){ return; }
             //Reveal normal squares
@@ -165,5 +175,14 @@ class Box{
                     //Tiles neighbouring by y
                     && (box.boxY == this.boxY - 1 || box.boxY == this.boxY || box.boxY == this.boxY + 1));
         });
+    }
+    //Count mines in neighbours and generate proper image
+    colorNumbered() {
+        let neighbouring = this.neighbours();
+        let count = neighbouring.filter((box) => box.mine).length;
+        this.color(game.colors["mine-neighbour"]);
+        ctx.fillStyle = "#000000";
+        ctx.font = "20px Arial";
+        ctx.fillText(count, this.boxX * boxSize + margin + 5, this.boxY * boxSize + margin + 17);
     }
 }
