@@ -13,20 +13,27 @@ func Ex1(value: Array<Any>) -> Array<Int>{
     return result;
 }
 
-
 // ----- EXERCISE 2 -----
 //your own little parser from readLine to Array<Any>
 func ParseArray(value: String) -> Array<Any>{
     var r = value;
     r = r.replacingOccurrences(of: "[", with: ""); r = r.replacingOccurrences(of: "]", with: ""); 
+    r = r.replacingOccurrences(of: " ", with: ""); r = r.replacingOccurrences(of: " ", with: ""); 
 
-    var result = r.components(separatedBy: ",");
+    var result: [Any] = r.components(separatedBy: ",");
+    for i in 0..<result.count{
+        if let x = Int(result[i] as! String){
+            result[i] = x;
+        }
+    }
     return result;
 }
 func Ex2() -> Array<Any>{
     // Input
     print("Podaj tablicę");
     var arr = ParseArray(value: readLine() ?? "");
+    print("Wprowadzona tablica:")
+    print(arr); 
     print("Podaj rotację: Rx lub Lx (x - liczba naturalna). Podaj k żeby wyjść.");
     var rot = "";
     repeat{
