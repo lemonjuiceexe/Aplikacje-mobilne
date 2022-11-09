@@ -14,6 +14,7 @@ var allPoints = 0;
 // var playerBigPoints = 0;
 // var computerBigPoints = 0;
 var gameInProgress = true;
+var playerPersian = false; var computerPersian = false;
 
 func shuffleDeck(){
     //Even more randomness - this way the cards are never in order
@@ -74,36 +75,40 @@ func playerPlay(){
         }
         //Draw
         else {
+            //Check if you don't have too much cards already
+            //Math says the max amount of cards you can have before exceeding 21 is 8 cards + 1 to exceed
+            // (4 * 2) + (4 * 3) + 1 * 4 = 24 > 21
+            if(playerCards.count >= 9){
+                print("Dzień dobry Panie Profesorze. Nikt inny by nie próbował dobierać kart do oporu, także serdecznie Pana pozdrawiam i informuję, że matematyka mówi, że mając 9 kart na pewno przekroczył Pan już 21 punktów. W związku z tym pasujemy. Życzę miłego dzionka i niezłej jazdy w tym Swifcie.");
+                print("Pas!");
+                break;
+            }
             let card = deck.randomElement()!;
-            deck.remove(card);
             playerCards.insert(card);
             playerPoints += getPoints(card: card);
             
             printTurnInfo(player: true, revealed: true);
 
             if(playerCards.count == 2 && playerPoints == 22){
-                print("Perskie oko!");
-                win(player: true);
+                // print("Perskie oczko!");
+                playerPersian = true;
                 break;
             }
             else if(playerPoints == 21){
-                print("Oczko!");
-                win(player: true);
+                // print("Oczko!");
+                // win(player: true);
             }
-            else if(playerPoints > 21){
-                win(player: false);
-                break;
-            }
+            // else if(playerPoints > 21){
+                // win(player: false);
+                // break;
+            // }
         }
     } while true;
 }
 func computerPlay(){
-    // if(!gameInProgress) { return; }
-    print("Computer's playing with " + String(computerPoints) + " points");
-
-    while (computerPoints < 16 /*|| computerPoints < playerPoints*/ || (allPoints - computerPoints) / (52 - computerCards.count) <= 21 - computerPoints) {
-        // If AI has already beaten the player, then stop playing 
-        // if (startingPlayer == 1 && computerPoints > playerPoints) { break; }
+    while (computerPoints < 18 || (allPoints - computerPoints) / (52 - computerCards.count) <= 21 - computerPoints) {
+        //If the player is dumb as hell and draws 0-1 cards then ai only needs to beat 11 points
+        if (startingPlayer == 1 && playerCards.count <= 1 && computerPoints >= 12) { break; }
         let card = deck.randomElement()!;
         deck.remove(card);
         computerCards.insert(card);
@@ -112,26 +117,16 @@ func computerPlay(){
         printTurnInfo(player: false, revealed: false);
 
         if(computerCards.count == 2 && computerPoints == 22){
-            print("Perskie oko!");
-            win(player: false);
+            print("Perskie oczko!");
+            // win(player: false, persian: true);
+            computerPersian = true;
             return;
         }
         else if(computerPoints == 21){
-            print("Oczko!");
-            win(player: false);
-        }
-        else if(computerPoints > 21){
-            win(player: true);
-            return;
+            // print("Oczko!");
+            // win(player: false);
         }
 
-        // print("-- COMPUTER DECIDING --");
-        // print("Computer has " + String(computerPoints) + " points");
-        // print("points < 16 " + String(computerPoints < 16));
-        // print("points < playerPoints " + String(computerPoints < playerPoints));
-        // print("we have " + String(21 - computerPoints) + " points to play with");
-        // print("average left in deck is " + String((allPoints - computerPoints) / (52 - computerCards.count)));
-        // print("toPlay > average " + String((allPoints - computerPoints) / (52 - computerCards.count) <= 21 - computerPoints))
     } 
     print("Komputer pasuje!");
 }
@@ -146,11 +141,16 @@ func printTurnInfo(player : Bool, revealed : Bool){
     }
     print(player ? "\nTwoja ręka:" : "\nRęka komputera:");
     info += revealed ? "\tSUMA: " + String(p) + "\n" : "\tSUMA: ??\n";
+    info += (d.count == 2 && p == 22) && revealed ? " Perskie oczko!" : "";
+    info += (p == 21) && revealed ? " Oczko!" : "";
     print(info);
 }
 
-func win(player: Bool){
-    if(player){
+func win(player: Bool, draw: Bool = false){
+    if(draw){
+        print("Remis!");
+    }
+    else if(player){
         print("Wygrałeś!");
     }
     else {
@@ -179,13 +179,35 @@ func win(player: Bool){
             computerPlay();
         }
     }
-    if(playerPoints > computerPoints && gameInProgress){
+    if(playerPoints == computerPoints){
+        win(player: true, draw: true);
+    }
+    else if(playerPersian){
         win(player: true);
     }
-    else if(playerPoints < computerPoints && gameInProgress){
+    else if(computerPersian){
         win(player: false);
     }
-    else if(gameInProgress){
-        print("Remis!");
+    //Cases without persian
+    //the player with more points under 21 wins. if both exceed 21, the player with less points wins
+    else if(playerPoints > 21 && computerPoints > 21){
+        if(playerPoints < computerPoints){
+            win(player: true);
+        }
+        else {
+            win(player: false);
+        }
+    }
+    else if(playerPoints > 21){
+        win(player: false);
+    }
+    else if(computerPoints > 21){
+        win(player: true);
+    }
+    else if(playerPoints > computerPoints){
+        win(player: true);
+    }
+    else {
+        win(player: false);
     }
     gameInProgress = true;
