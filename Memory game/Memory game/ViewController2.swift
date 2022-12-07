@@ -15,9 +15,28 @@ class ViewController2: UIViewController {
     public var buttons: Array<UIButton> = [];
     public var rotated: Array<Int> = [];
     public var answers: Array<Int> = [];
-    public var colors: Array<UIColor> = [];
     public var moves: Int = 0;
     public var correct: Int = 0;
+    
+    public var images: Array<String> = [
+        "Cabbage",
+        "Carrot",
+        "Cauliflower",
+        "Chinese-Cabbage",
+        "Corn",
+        "Cucumber",
+        "Eggplant",
+        "Garlic",
+        "Ginger",
+        "Green-Onion",
+        "Green-Pepper",
+        "Japanese-Radish",
+        "Leaf-Lettuce",
+        "Lettuce",
+        "Red-Onion",
+        "Snowpea",
+        "Sweet-Potato"
+    ];
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,8 +60,8 @@ class ViewController2: UIViewController {
     }
     
     func drawAnswers(width: Int, height: Int){
+        images.shuffle();
         answers.removeAll();
-        colors.removeAll();
         let x: Int, y: Int;
         if(width < height){
             x = !gameMode ? 3 : 4;
@@ -57,16 +76,17 @@ class ViewController2: UIViewController {
             answers.shuffle();
         }
         print(answers);
-        for _ in 0..<((x*y)/2){
-            colors.append(UIColor(hue: .random(in: 0...1), saturation: 1, brightness: 1, alpha: 1));
-        }
+        /*for _ in 0..<((x*y)/2){
+            //colors.append(UIColor(hue: .random(in: 0...1), saturation: 1, brightness: 1, alpha: 1));
+            //colors.append(UIImage(name:""))
+        }*/
     }
     @objc func buttonClick(sender: UIButton){
         if(rotated.count < 2 && !rotated.contains(sender.tag)){
             rotated.append(sender.tag);
             UIView.transition(with: sender, duration: 1,  options: .transitionFlipFromRight, animations: {
-                sender.setBackgroundImage(nil, for: .normal)
-                sender.backgroundColor = self.colors[self.answers[sender.tag]];
+                sender.setBackgroundImage(UIImage(named: self.images[self.answers[sender.tag]] + "-icon-32"), for: .normal)
+                //sender.backgroundColor = self.colors[self.answers[sender.tag]];
             }, completion: nil);
             if(rotated.count == 2){
                 //molto bene
@@ -74,10 +94,14 @@ class ViewController2: UIViewController {
                     for el in self.rotated{
                         buttons[el].removeTarget(self, action: #selector(buttonClick), for: .touchUpInside);
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.buttons[el].backgroundColor = self.colors[self.answers[el]].withAlphaComponent(0.4);}
+                            //self.buttons[el].backgroundColor = self.colors[self.answers[el]].withAlphaComponent(0.4);
+                            
+                        }
                     }
                     self.rotated.removeAll();
                     self.correct += 2;
+                    print(answers);
+                    print(self.correct);
                 }
                 //male
                 else{
@@ -92,6 +116,20 @@ class ViewController2: UIViewController {
                     }
                 }
                 self.moves += 1;
+                
+                if(correct >= answers.count){
+                    print("very good win");
+                    let okAction = UIAlertAction(title: "OK", style: .default){
+                        (action) in
+                        self.navigationController!.popViewController(animated: true);
+                    };
+                    var alert = UIAlertController(title: "Wygranko", message: "Wykonałeś " + String(moves) + " ruchów", preferredStyle: .alert);
+                    //alert.addAction(UIAlertAction(title: "OK", style:.default, handler: nil));
+                    alert.addAction(okAction);
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        self.present(alert, animated: true);
+                    }
+                }
             }
             else{}
             
@@ -130,9 +168,8 @@ class ViewController2: UIViewController {
         print(x); print(y);
         
         if(buttons.count > 0) {
-            //copilot napisz to samo co nizej tyhlko inaczej
             var i = 0; var j = 0; var count = 0;
-            var ypos = margin + navbar + yOffset;
+            var ypos = margin + navbar + yOffset + 10;
             while(i/150 < y){
                 var xpos = xOffset - margin;
                 while(j/150 < x){
@@ -151,7 +188,7 @@ class ViewController2: UIViewController {
         }
         
         var i = 0; var j = 0;
-        var ypos = margin + navbar + yOffset;
+        var ypos = margin + navbar + yOffset + 10;
         while(i/150 < y){
             var xpos = xOffset - margin;
             while(j/150 < x){
