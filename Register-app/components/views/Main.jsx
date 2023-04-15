@@ -1,11 +1,12 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
-import Button from "./Button";
+import Button from "../Button.jsx";
 
-export default function Main() {
+export default function Main(props) {
 	return (
 		<>
+			<StatusBar />
 			<View style={styles.header}>
 				<Text style={styles.headerText}>Register app</Text>
 			</View>
@@ -17,6 +18,7 @@ export default function Main() {
 					text="Login"
 					backgroundColor="cornflowerblue"
 					textColor="white"
+					onPress={() => props.navigation.navigate('UsersList')}
 				/>
 			</View>
 		</>
