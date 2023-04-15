@@ -36,6 +36,10 @@ export default function UsersList(props) {
 
 	let index = 1;
 
+	function removeUserHandler(login){
+		setUsers(prevState => prevState.filter(user => user.login !== login));
+	}
+
 	return (
 		<View style={styles.container}>
 			<Button
@@ -53,6 +57,7 @@ export default function UsersList(props) {
 						login={item.login}
 						password={item.password}
 						date={item.date}
+						onRemoveUser={() => removeUserHandler(item.login)}
 					/>
 				}
 				keyExtractor={user => user.login}

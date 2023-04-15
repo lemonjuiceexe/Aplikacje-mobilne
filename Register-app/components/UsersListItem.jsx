@@ -70,10 +70,10 @@ export default function UsersListItem(props) {
 			</View>
 			<View style={styles.dataWrapper}>
 				<View style={styles.textWrapper}>
-				<Text style={styles.text}>
-					<Text style={styles.label}>{props.index}:&nbsp;</Text>
-					{props.login}
-				</Text>
+					<Text style={styles.text}>
+						<Text style={styles.label}>{props.index}:&nbsp;</Text>
+						{props.login}
+					</Text>
 				</View>
 				<View style={styles.buttonsWrapper}>
 					<Button
@@ -87,7 +87,10 @@ export default function UsersListItem(props) {
 							})
 						}
 					/>
-					<Button text='Delete' backgroundColor='tomato' textColor='white' fontSize={20} />
+					<Button
+						text='Delete' backgroundColor='tomato' textColor='white' fontSize={20}
+						onPress={props.onRemoveUser}
+					/>
 				</View>
 			</View>
 		</View>
