@@ -1,5 +1,5 @@
-import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {useNavigation} from "@react-navigation/native";
 
 import Button from "./Button.jsx";
 
@@ -43,6 +43,8 @@ export default function UsersListItem(props) {
 		}
 	});
 
+	const navigation = useNavigation();
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.imageWrapper}>
@@ -50,7 +52,17 @@ export default function UsersListItem(props) {
 			</View>
 			<View style={styles.dataWrapper}>
 				<View style={styles.buttonsWrapper}>
-					<Button text='Details' backgroundColor='green' textColor='white' fontSize={15} />
+					<Button
+						text='Details' backgroundColor='green' textColor='white' fontSize={15}
+						onPress={() =>
+							navigation.navigate('UserDetails', {
+								styles: styles,
+								login: props.login,
+								password: props.password,
+								date: props.date
+							})
+						}
+					/>
 					<Button text='Delete' backgroundColor='tomato' textColor='white' fontSize={15} />
 				</View>
 				<Text style={styles.text}>

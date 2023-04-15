@@ -25,13 +25,15 @@ export default function UsersList(props) {
 			backgroundColor: '#fff',
 			alignItems: 'center',
 			justifyContent: 'center',
-			width: '100%'
+			width: '100%',
+			paddingTop: 10
 		},
 		list: {
 			width: '100%',
 			padding: 10
 		}
 	});
+
 	let index = 1;
 
 	return (
@@ -45,7 +47,7 @@ export default function UsersList(props) {
 			<FlatList
 				style={styles.list}
 				data={users}
-				renderItem={({item}) => 
+				renderItem={({item}) =>
 					<UsersListItem
 						index={index++}
 						login={item.login}
