@@ -21,7 +21,12 @@ export default function App() {
 	return (
 		<NavigationContainer>
 			<Stack.Navigator>
-				<Stack.Screen name="Main" component={Main}/>
+				<Stack.Screen name="Main"
+							  component={Main}
+							  options={{
+								  headerShown: false
+							  }}
+				/>
 				<Stack.Screen name="UsersList" component={UsersList}/>
 				<Stack.Screen name="UserDetails" component={UserDetails}/>
 			</Stack.Navigator>

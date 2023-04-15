@@ -12,31 +12,49 @@ export default function UsersListItem(props) {
 			justifyContent: 'space-around',
 			borderColor: 'black',
 			borderWidth: 1,
-			width: '90%',
+			width: '95%',
 			flexDirection: 'row',
-			margin: 10,
-			padding: 10
+			margin: 10
 		},
 		imageWrapper: {
 			flexDirection: 'column',
-			justifyContent: 'space-around',
+			justifyContent: 'center',
 			alignItems: 'center',
 			flex: 1,
-			height: '100%'
+			height: '100%',
+			marginVertical: 10
+		},
+		image: {
+			width: '90%',
+			aspectRatio: 1,
+			fontSize: 20,
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			borderRadius: 300,
+			borderColor: 'black',
+			borderWidth: 1
 		},
 		dataWrapper: {
 			flexDirection: 'column',
 			justifyContent: 'space-around',
-			alignItems: 'center',
-			flex: 2,
+			alignItems: 'flex-start',
+			flex: 2.5,
 			height: '100%'
 		},
 		buttonsWrapper: {
 			flexDirection: 'row',
 
 		},
+		textWrapper: {
+			width: '100%',
+			flexDirection: 'row',
+			justifyContent: 'flex-start',
+			paddingLeft: '6%',
+			marginVertical: 5
+		},
 		text: {
-			fontSize: 20
+			fontSize: 20,
+			textAlign: 'left'
 		},
 		label: {
 			fontWeight: 'bold'
@@ -48,12 +66,18 @@ export default function UsersListItem(props) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.imageWrapper}>
-				<Text>img</Text>
+				<Text style={styles.image}>img</Text>
 			</View>
 			<View style={styles.dataWrapper}>
+				<View style={styles.textWrapper}>
+				<Text style={styles.text}>
+					<Text style={styles.label}>{props.index}:&nbsp;</Text>
+					{props.login}
+				</Text>
+				</View>
 				<View style={styles.buttonsWrapper}>
 					<Button
-						text='Details' backgroundColor='green' textColor='white' fontSize={15}
+						text='Details' backgroundColor='green' textColor='white' fontSize={20}
 						onPress={() =>
 							navigation.navigate('UserDetails', {
 								styles: styles,
@@ -63,12 +87,8 @@ export default function UsersListItem(props) {
 							})
 						}
 					/>
-					<Button text='Delete' backgroundColor='tomato' textColor='white' fontSize={15} />
+					<Button text='Delete' backgroundColor='tomato' textColor='white' fontSize={20} />
 				</View>
-				<Text style={styles.text}>
-					<Text style={styles.label}>{props.index}:&nbsp;</Text>
-					{props.login}
-				</Text>
 			</View>
 		</View>
 	);
