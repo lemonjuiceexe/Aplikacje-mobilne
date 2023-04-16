@@ -48,6 +48,7 @@ export default function Main(props) {
 			</View>
 			<View style={styles.login}>
 				<Text style={styles.loginHeader}>Login</Text>
+				<TextInput style={styles.input} placeholder="Server IP address" />
 				<TextInput style={styles.input} placeholder="Login" />
 				<TextInput style={styles.input} placeholder="Password" />
 				<Button
