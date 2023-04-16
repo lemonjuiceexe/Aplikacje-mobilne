@@ -1,6 +1,9 @@
 const express = require('express');
 const { readFileSync, writeFile } = require('fs');
+const path = require('path');
+
 const app = express();
+app.use(express.static(__dirname + '/public'));
 
 let users = [];
 // The file is relative to the whole project's root and not the server file
@@ -13,6 +16,9 @@ catch(err){
 }
 
 app.get('/', (req, res) => {
+	res.render("index.html");
+});
+app.post('/', (req, res) => {
 	  users.push({
 		  "login": "added",
 		  "password": "ads",
