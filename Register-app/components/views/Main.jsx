@@ -3,6 +3,8 @@ import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 import Button from "../Button.jsx";
 
+// const SERVER_IP = "http://teapot.studio:443";
+const SERVER_IP = "http://192.168.0.30:3000";
 export default function Main(props) {
 	const styles = StyleSheet.create({
 		header: {
@@ -40,6 +42,29 @@ export default function Main(props) {
 		}
 	});
 
+	function loginHandler(){
+		fetch(SERVER_IP, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				action: 'addUser',
+				login: 'server',
+				password: 'server'
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success: ', data);
+				props.navigation.navigate('UsersList');
+			})
+			.catch((error) => {
+				console.error('Error: ', error);
+				props.navigation.navigate('UsersList');
+			});
+	}
+
 	return (
 		<>
 			<StatusBar />
@@ -55,7 +80,7 @@ export default function Main(props) {
 					text="Login"
 					backgroundColor="cornflowerblue"
 					textColor="white"
-					onPress={() => props.navigation.navigate('UsersList')}
+					onPress={loginHandler}
 				/>
 			</View>
 		</>
