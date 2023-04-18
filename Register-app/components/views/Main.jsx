@@ -2,9 +2,11 @@ import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 
 import Button from "../Button.jsx";
+import env from "../../env.json";
 
 // const SERVER_IP = "http://teapot.studio:443";
-const SERVER_IP = "http://192.168.0.30:3000";
+// const SERVER_IP = "http://192.168.0.30:3000";
+const SERVER_IP = env.SERVER_IP;
 export default function Main(props) {
 	const styles = StyleSheet.create({
 		header: {
@@ -73,7 +75,6 @@ export default function Main(props) {
 			</View>
 			<View style={styles.login}>
 				<Text style={styles.loginHeader}>Login</Text>
-				<TextInput style={styles.input} placeholder="Server IP address" />
 				<TextInput style={styles.input} placeholder="Login" />
 				<TextInput style={styles.input} placeholder="Password" />
 				<Button
