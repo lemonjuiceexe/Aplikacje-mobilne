@@ -1,5 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {useState} from "react";
 
 import Button from "../Button.jsx";
 import env from "../../env.json";
@@ -8,6 +9,8 @@ import env from "../../env.json";
 // const SERVER_IP = "http://192.168.0.30:3000";
 const SERVER_IP = env.SERVER_IP;
 export default function Main(props) {
+	const [login, setLogin] = useState('');
+	const [password, setPassword] = useState('');
 	const styles = StyleSheet.create({
 		header: {
 			flex: 1,
@@ -44,6 +47,12 @@ export default function Main(props) {
 		}
 	});
 
+	function loginChangeHandler(login){
+		setLogin(login);
+	}
+	function passwordChangeHandler(password){
+		setPassword(password);
+	}
 	function loginHandler(){
 		fetch(SERVER_IP, {
 			method: 'POST',
@@ -52,12 +61,17 @@ export default function Main(props) {
 			},
 			body: JSON.stringify({
 				action: 'addUser',
-				login: 'server',
-				password: 'server'
+				login: login,
+				password: password
 			})
 		})
 			.then(response => response.json())
 			.then(data => {
+				if(data["exists"] === true){
+					console.log("User already exists");
+					alert("User already exists");
+					return;
+				}
 				console.log('Success: ', data);
 				props.navigation.navigate('UsersList');
 			})
@@ -75,8 +89,16 @@ export default function Main(props) {
 			</View>
 			<View style={styles.login}>
 				<Text style={styles.loginHeader}>Login</Text>
-				<TextInput style={styles.input} placeholder="Login" />
-				<TextInput style={styles.input} placeholder="Password" />
+				<TextInput
+					style={styles.input}
+					placeholder="Login"
+					onChangeText={loginChangeHandler}
+				/>
+				<TextInput
+					style={styles.input}
+					placeholder="Password"
+					onChangeText={passwordChangeHandler}
+				/>
 				<Button
 					text="Login"
 					backgroundColor="cornflowerblue"

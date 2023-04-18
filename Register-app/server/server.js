@@ -24,6 +24,15 @@ app.post('/', (req, res) => {
 	const action = req.body.action;
 	switch (action) {
 		case 'addUser':
+			// Check if the user already exists
+			for (let i = 0; i < users.length; i++) {
+				if (users[i].login === req.body.login) {
+					res.json({
+						exists: true
+					});
+					return;
+				}
+			}
 			users.push({
 				"login": req.body.login,
 				"password": req.body.password,
@@ -48,7 +57,8 @@ app.post('/', (req, res) => {
 			});
 
 			break;
-
+		case 'getUsers':
+			res.json(users);
 		default:
 			res
 				.status(400)

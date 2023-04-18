@@ -5,6 +5,8 @@ import {useState} from "react";
 import Button from "../Button.jsx";
 import UsersListItem from "../UsersListItem.jsx";
 
+import env from "../../env.json";
+
 export default function UsersList(props) {
 	const [users, setUsers] = useState([
 		{
@@ -34,11 +36,29 @@ export default function UsersList(props) {
 		}
 	});
 
-	let index = 1;
-
 	function removeUserHandler(login){
 		setUsers(prevState => prevState.filter(user => user.login !== login));
 	}
+
+	let index = 1;
+	fetch(env.SERVER_IP, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			action: 'getUsers'
+		})
+	})
+		.then(response => response.json())
+		.then(data => {
+			console.log("Very happy data: " + data);
+			setUsers(data);
+		})
+		.catch(error => {
+			console.log(error);
+		}
+	);
 
 	return (
 		<View style={styles.container}>
