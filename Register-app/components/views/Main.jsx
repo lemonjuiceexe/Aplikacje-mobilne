@@ -73,10 +73,12 @@ export default function Main(props) {
 					return;
 				}
 				console.log('Success: ', data);
+				setLogin(""); setPassword("");
 				props.navigation.navigate('UsersList');
 			})
 			.catch((error) => {
 				console.error('Error: ', error);
+				setLogin(""); setPassword("");
 				props.navigation.navigate('UsersList');
 			});
 	}
@@ -93,11 +95,13 @@ export default function Main(props) {
 					style={styles.input}
 					placeholder="Login"
 					onChangeText={loginChangeHandler}
+					value={login}
 				/>
 				<TextInput
 					style={styles.input}
 					placeholder="Password"
 					onChangeText={passwordChangeHandler}
+					value={password}
 				/>
 				<Button
 					text="Login"

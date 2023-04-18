@@ -1,6 +1,6 @@
 import {StatusBar} from 'expo-status-bar';
 import {StyleSheet, Text, TextInput, View, FlatList} from 'react-native';
-import {useState} from "react";
+import {useState, useEffect} from "react";
 
 import Button from "../Button.jsx";
 import UsersListItem from "../UsersListItem.jsx";
@@ -36,29 +36,31 @@ export default function UsersList(props) {
 		}
 	});
 
-	function removeUserHandler(login){
+	function removeUserHandler(login) {
 		setUsers(prevState => prevState.filter(user => user.login !== login));
 	}
 
 	let index = 1;
-	fetch(env.SERVER_IP, {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			action: 'getUsers'
+	useEffect(() => {
+		fetch(env.SERVER_IP, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				action: 'getUsers'
+			})
 		})
-	})
-		.then(response => response.json())
-		.then(data => {
-			console.log("Very happy data: " + data);
-			setUsers(data);
-		})
-		.catch(error => {
-			console.log(error);
-		}
-	);
+			.then(response => response.json())
+			.then(data => {
+				console.log("Very happy data: " + data);
+				setUsers(data);
+			})
+			.catch(error => {
+					console.log(error);
+				}
+			);
+	}, []);
 
 	return (
 		<View style={styles.container}>

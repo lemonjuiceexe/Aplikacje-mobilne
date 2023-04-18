@@ -59,6 +59,7 @@ app.post('/', (req, res) => {
 			break;
 		case 'getUsers':
 			res.json(users);
+			break;
 		default:
 			res
 				.status(400)
