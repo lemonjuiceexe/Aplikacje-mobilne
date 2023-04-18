@@ -60,6 +60,24 @@ app.post('/', (req, res) => {
 		case 'getUsers':
 			res.json(users);
 			break;
+		case 'deleteUser':
+			const loginToDelete = req.body.login;
+			users = users.filter(user => user.login !== loginToDelete);
+			writeFile('./server/users.json', JSON.stringify(users), (err) => {
+				if (err) {
+					console.log(err);
+					res
+						.status(500)
+						.setHeader('Content-Type', 'text/plain')
+						.send('500 Error while deleting the user');
+					return;
+				}
+				console.log('User successfully deleted');
+				users = JSON.parse(readFileSync('./server/users.json', 'utf8'));
+				res.json(users);
+			});
+
+			break;
 		default:
 			res
 				.status(400)

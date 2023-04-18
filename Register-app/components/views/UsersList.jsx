@@ -37,11 +37,28 @@ export default function UsersList(props) {
 	});
 
 	function removeUserHandler(login) {
-		setUsers(prevState => prevState.filter(user => user.login !== login));
+		fetch(env.SERVER_IP, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				action: 'deleteUser',
+				login: login
+			})
+		})
+			.then(response => response.json())
+			.then(data => {
+					console.log("Very happy data: " + data);
+					setUsers(data);
+				}
+			)
+			.catch(error => {
+					console.log(error);
+				}
+			);
 	}
-
-	let index = 1;
-	useEffect(() => {
+	function syncList(){
 		fetch(env.SERVER_IP, {
 			method: 'POST',
 			headers: {
@@ -60,6 +77,11 @@ export default function UsersList(props) {
 					console.log(error);
 				}
 			);
+	}
+
+	let index = 1;
+	useEffect(() => {
+		syncList();
 	}, []);
 
 	return (
