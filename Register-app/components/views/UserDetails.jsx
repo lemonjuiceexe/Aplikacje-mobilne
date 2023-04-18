@@ -1,4 +1,4 @@
-import {SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import {SafeAreaView, StyleSheet, Text, TextInput, View, Image} from 'react-native';
 import {StatusBar} from "react-native";
 import {useSafeAreaInsets} from "react-native-safe-area-context";
 
@@ -12,25 +12,27 @@ export default function UserDetails(properties){
 			height: '100%',
 			paddingVertical: '30%',
 			paddingHorizontal: '10%',
+			backgroundColor: 'rgb(48, 176, 199)'
 		},
 		'text':  {
 			fontSize: 20,
-			marginVertical: 5
+			marginVertical: 5,
+			color: 'white'
 		},
 		'image':  {
-			borderColor: 'black',
+			borderColor: 'white',
 			borderWidth: 1,
 			width: '60%',
-			aspectRatio: 1,
-			fontSize: 20,
-			textAlign: 'center',
-			textAlignVertical: 'center',
+			height: '50%',
 			borderRadius: 300
+		},
+		'label':  {
+			fontWeight: 'bold'
 		}
 	});
 	return (
 		<View style={styles.container}>
-			<Text style={styles.image}>image</Text>
+			<Image style={styles.image} source={require("../../assets/profile.jpg")} />
 			<View>
 			<Text style={styles.text}>
 				<Text style={styles.label}>Login:&nbsp;</Text>

@@ -1,4 +1,4 @@
-import {StyleSheet, Text, TextInput, View} from 'react-native';
+import {Image, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useNavigation} from "@react-navigation/native";
 
 import Button from "./Button.jsx";
@@ -7,14 +7,17 @@ export default function UsersListItem(props) {
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: '#fff',
+			backgroundColor: 'rgb(48, 176, 199)',
+			color: "#fff",
 			alignItems: 'center',
 			justifyContent: 'space-around',
-			borderColor: 'black',
-			borderWidth: 1,
 			width: '95%',
 			flexDirection: 'row',
-			margin: 10
+			margin: 10,
+			borderRadius: 10,
+			borderColor: 'rgb(10, 132, 255)',
+			borderWidth: 4,
+			padding: 2
 		},
 		imageWrapper: {
 			flexDirection: 'column',
@@ -25,11 +28,8 @@ export default function UsersListItem(props) {
 			marginVertical: 10
 		},
 		image: {
-			width: '90%',
-			aspectRatio: 1,
-			fontSize: 20,
-			textAlign: 'center',
-			textAlignVertical: 'center',
+			width: '75%',
+			height: '95%',
 			borderRadius: 300,
 			borderColor: 'black',
 			borderWidth: 1
@@ -54,7 +54,9 @@ export default function UsersListItem(props) {
 		},
 		text: {
 			fontSize: 20,
-			textAlign: 'left'
+			textAlign: 'left',
+			color: '#fff',
+			fontWeight: 'bold'
 		},
 		label: {
 			fontWeight: 'bold'
@@ -66,12 +68,12 @@ export default function UsersListItem(props) {
 	return (
 		<View style={styles.container}>
 			<View style={styles.imageWrapper}>
-				<Text style={styles.image}>img</Text>
+				<Image style={styles.image} source={require("../assets/profile.jpg")} />
 			</View>
 			<View style={styles.dataWrapper}>
 				<View style={styles.textWrapper}>
 					<Text style={styles.text}>
-						<Text style={styles.label}>{props.index}:&nbsp;</Text>
+						{/*<Text style={styles.label}>{props.index}:&nbsp;</Text>*/}
 						{props.login}
 					</Text>
 				</View>

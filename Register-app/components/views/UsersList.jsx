@@ -8,18 +8,7 @@ import UsersListItem from "../UsersListItem.jsx";
 import env from "../../env.json";
 
 export default function UsersList(props) {
-	const [users, setUsers] = useState([
-		{
-			login: 'user1',
-			password: 'password1',
-			date: '2021-01-01'
-		},
-		{
-			login: 'user2',
-			password: 'password2',
-			date: '2021-01-02'
-		}
-	]);
+	const [users, setUsers] = useState([]);
 
 	const styles = StyleSheet.create({
 		container: {
@@ -79,10 +68,18 @@ export default function UsersList(props) {
 			);
 	}
 
+	let j = 0;
 	let index = 1;
 	useEffect(() => {
 		syncList();
+		// index = 1;
+		// j = 0;
 	}, []);
+	useEffect(() => {
+		index = 1;
+		j = 1;
+	}, [users]);
+
 
 	return (
 		<View style={styles.container}>
@@ -95,15 +92,16 @@ export default function UsersList(props) {
 			<FlatList
 				style={styles.list}
 				data={users}
-				renderItem={({item}) =>
-					<UsersListItem
-						index={index++}
+				renderItem={({item}) =>{
+					j += 1;
+					return <UsersListItem
+						index={j}
 						login={item.login}
 						password={item.password}
 						date={item.date}
 						onRemoveUser={() => removeUserHandler(item.login)}
 					/>
-				}
+				}}
 				keyExtractor={user => user.login}
 			/>
 		</View>

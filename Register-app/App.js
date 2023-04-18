@@ -27,8 +27,18 @@ export default function App() {
 								  headerShown: false
 							  }}
 				/>
-				<Stack.Screen name="UsersList" component={UsersList}/>
-				<Stack.Screen name="UserDetails" component={UserDetails}/>
+				<Stack.Screen name="UsersList"
+							  component={UsersList}
+							  options={{
+								  headerTitle: "List of users"
+							  }}
+				/>
+				<Stack.Screen name="UserDetails"
+							  component={UserDetails}
+							  options={{
+								  headerTitle: "User details"
+							  }}
+				/>
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

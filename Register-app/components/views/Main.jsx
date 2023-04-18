@@ -5,8 +5,6 @@ import {useState} from "react";
 import Button from "../Button.jsx";
 import env from "../../env.json";
 
-// const SERVER_IP = "http://teapot.studio:443";
-// const SERVER_IP = "http://192.168.0.30:3000";
 const SERVER_IP = env.SERVER_IP;
 export default function Main(props) {
 	const [login, setLogin] = useState('');
@@ -54,6 +52,11 @@ export default function Main(props) {
 		setPassword(password);
 	}
 	function loginHandler(){
+		if(login === "" || password === ""){
+			console.log("Empty login or password");
+			alert("Empty login or password");
+			return;
+		}
 		fetch(SERVER_IP, {
 			method: 'POST',
 			headers: {
