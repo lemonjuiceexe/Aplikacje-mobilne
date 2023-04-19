@@ -12,7 +12,7 @@ export default function Main(props) {
 	const styles = StyleSheet.create({
 		header: {
 			flex: 1,
-			backgroundColor: '#f4511e',
+			backgroundColor: '#3F51B5',
 			alignItems: 'center',
 			justifyContent: 'center',
 			borderBottomWidth: 10,
@@ -108,7 +108,7 @@ export default function Main(props) {
 				/>
 				<Button
 					text="Login"
-					backgroundColor="cornflowerblue"
+					backgroundColor="#FF4081"
 					textColor="white"
 					onPress={loginHandler}
 				/>

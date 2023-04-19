@@ -17,7 +17,7 @@ export default function UsersList(props) {
 			alignItems: 'center',
 			justifyContent: 'center',
 			width: '100%',
-			paddingTop: 10
+			paddingVertical: 10
 		},
 		list: {
 			width: '100%',
@@ -68,24 +68,18 @@ export default function UsersList(props) {
 			);
 	}
 
-	let j = 0;
-	let index = 1;
 	useEffect(() => {
 		syncList();
 		// index = 1;
 		// j = 0;
 	}, []);
-	useEffect(() => {
-		index = 1;
-		j = 1;
-	}, [users]);
 
 
 	return (
 		<View style={styles.container}>
 			<Button
 				text="Go back"
-				backgroundColor="cornflowerblue"
+				backgroundColor="#FF4081"
 				textColor="white"
 				onPress={() => props.navigation.navigate('Main')}
 			/>
@@ -93,9 +87,8 @@ export default function UsersList(props) {
 				style={styles.list}
 				data={users}
 				renderItem={({item}) =>{
-					j += 1;
 					return <UsersListItem
-						index={j}
+						index={item.index}
 						login={item.login}
 						password={item.password}
 						date={item.date}

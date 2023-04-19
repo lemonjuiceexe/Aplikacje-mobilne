@@ -58,6 +58,7 @@ app.post('/', (req, res) => {
 
 			break;
 		case 'getUsers':
+			users = users.map((el, i) => {return {...el, index: i+1}});
 			res.json(users);
 			break;
 		case 'deleteUser':
@@ -74,6 +75,7 @@ app.post('/', (req, res) => {
 				}
 				console.log('User successfully deleted');
 				users = JSON.parse(readFileSync('./server/users.json', 'utf8'));
+				users = users.map((el, i) => {return {...el, index: i+1}});
 				res.json(users);
 			});
 

@@ -7,17 +7,15 @@ export default function UsersListItem(props) {
 	const styles = StyleSheet.create({
 		container: {
 			flex: 1,
-			backgroundColor: 'rgb(48, 176, 199)',
-			color: "#fff",
+			backgroundColor: '#C5CAE9',
+			color: "#000",
 			alignItems: 'center',
 			justifyContent: 'space-around',
 			width: '95%',
 			flexDirection: 'row',
 			margin: 10,
 			borderRadius: 10,
-			borderColor: 'rgb(10, 132, 255)',
-			borderWidth: 4,
-			padding: 2
+			padding: 4
 		},
 		imageWrapper: {
 			flexDirection: 'column',
@@ -55,7 +53,7 @@ export default function UsersListItem(props) {
 		text: {
 			fontSize: 20,
 			textAlign: 'left',
-			color: '#fff',
+			color: '#000',
 			fontWeight: 'bold'
 		},
 		label: {
@@ -73,13 +71,13 @@ export default function UsersListItem(props) {
 			<View style={styles.dataWrapper}>
 				<View style={styles.textWrapper}>
 					<Text style={styles.text}>
-						{/*<Text style={styles.label}>{props.index}:&nbsp;</Text>*/}
+						<Text style={styles.label}>{props.index}:&nbsp;</Text>
 						{props.login}
 					</Text>
 				</View>
 				<View style={styles.buttonsWrapper}>
 					<Button
-						text='Details' backgroundColor='green' textColor='white' fontSize={20}
+						text='Details' backgroundColor='#3F51B5' textColor='white' fontSize={20}
 						onPress={() =>
 							navigation.navigate('UserDetails', {
 								styles: styles,
@@ -90,7 +88,7 @@ export default function UsersListItem(props) {
 						}
 					/>
 					<Button
-						text='Delete' backgroundColor='tomato' textColor='white' fontSize={20}
+						text='Delete' backgroundColor='#FF4081' textColor='white' fontSize={20}
 						onPress={props.onRemoveUser}
 					/>
 				</View>

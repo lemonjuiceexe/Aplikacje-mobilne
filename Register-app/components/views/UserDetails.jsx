@@ -12,18 +12,18 @@ export default function UserDetails(properties){
 			height: '100%',
 			paddingVertical: '30%',
 			paddingHorizontal: '10%',
-			backgroundColor: 'rgb(48, 176, 199)'
+			backgroundColor: '#C5CAE9'
 		},
 		'text':  {
 			fontSize: 20,
 			marginVertical: 5,
-			color: 'white'
-		},
-		'image':  {
-			borderColor: 'white',
-			borderWidth: 1,
-			width: '60%',
-			height: '50%',
+			color: 'black'
+			},
+			'image':  {
+				borderColor: 'white',
+				borderWidth: 1,
+				width: '60%',
+				height: '50%',
 			borderRadius: 300
 		},
 		'label':  {
