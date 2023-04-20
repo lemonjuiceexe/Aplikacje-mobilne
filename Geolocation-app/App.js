@@ -5,6 +5,7 @@ import {StyleSheet, Text, View} from 'react-native';
 
 import MainPage from './components/views/MainPage';
 import LocationsList from './components/views/LocationsList';
+import Map from './components/views/Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,10 +19,16 @@ export default function App() {
 								  headerShown: false
 							  }}
 				/>
-				<Stack.Screen name="Locations List"
+				<Stack.Screen name="LocationsList"
 							  component={LocationsList}
 							  options={{
 								  headerTitle: "List of locations"
+							  }}
+				/>
+				<Stack.Screen name="Map"
+							  component={Map}
+							  options={{
+								  headerTitle: "Map"
 							  }}
 				/>
 			</Stack.Navigator>

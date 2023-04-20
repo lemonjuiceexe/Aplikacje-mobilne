@@ -4,7 +4,7 @@ import * as Font from 'expo-font';
 import {useState, useEffect} from "react";
 
 
-export default function MainPage(){
+export default function MainPage(props){
 	const [fontsLoaded, setFontsLoaded] = useState(false);
 
 	useEffect(() => {
@@ -27,7 +27,9 @@ export default function MainPage(){
 	return (
 		<View style={styles.container}>
 			<View style={styles.headerContainer}>
-				<TouchableOpacity>
+				<TouchableOpacity
+					onPress={() => props.navigation.navigate("LocationsList")}
+				>
 					<Text style={styles.header}>Main Page</Text>
 				</TouchableOpacity>
 				<Text style={styles.text}>a pretty bottom text to look at</Text>
