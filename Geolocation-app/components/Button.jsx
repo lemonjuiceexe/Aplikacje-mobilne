@@ -7,7 +7,10 @@ export default function Button(props) {
 			paddingHorizontal: props.paddingHorizontal ? props.paddingHorizontal : '11.5%',
 			paddingVertical: props.paddingVertical ? props.paddingVertical : '2%',
 			borderRadius: props.borderRadius ? props.borderRadius : 5,
-			margin: props.margin ? props.margin : 5,
+			marginHorizontal: props.marginHorizontal ? props.marginHorizontal : 5,
+			marginVertical: props.marginVertical ? props.marginVertical : 5,
+			width: props.width ? props.width : '',
+			height: props.height ? props.height : ''
 		},
 		buttonText: {
 			color: props.textColor ? props.textColor : 'white',
