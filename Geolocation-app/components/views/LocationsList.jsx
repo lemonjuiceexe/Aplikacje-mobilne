@@ -9,14 +9,14 @@ export default function LocationsList(props) {
 	const [locations, setLocations] = useState([
 		{
 			timestamp: Date.now(),
-			latitude: 50.01549126131934,
-			longitude: 19.95030437547158,
+			latitude: 50.01549,
+			longitude: 19.95030,
 			show: true
 		},
 		{
 			timestamp: Date.now() - 10,
-			latitude: 50.01549126131934,
-			longitude: 19.95030437547158,
+			latitude: 50.01549,
+			longitude: 19.95030,
 			show: true
 		}
 	]);
@@ -48,41 +48,41 @@ export default function LocationsList(props) {
 			console.log(a);
 			return a;
 		});
-		// setLocations([
-		// {
-		// 	timestamp: Date.now(),
-		// 	latitude: 50.01549126131934,
-		// 	longitude: 19.95030437547158,
-		// 	show: valueToSet
-		// },
-		// {
-		// 	timestamp: Date.now() - 10,
-		// 	latitude: 50.01549126131934,
-		// 	longitude: 19.95030437547158,
-		// 	show: valueToSet
-		// }
-		// ]);
+
 		setAllShown(prevState => !prevState);
+	}
+	async function saveLocationHandler() {
+		const location = await Location.getCurrentPositionAsync();
+		console.log(location);
+		setLocations(prevState => {
+			return [
+				{
+					timestamp: Date.now(),
+					latitude: location.coords.latitude,
+					longitude: location.coords.longitude,
+					show: true
+				},
+				...prevState
+			];
+		});
 	}
 
 	// Request location permission
-	// useEffect(() => {
-	// 	Location.requestForegroundPermissionsAsync()
-	// 		.then(status => {
-	// 			console.log(status);
-	// 			setPermissionGranted(status === 'granted');
-	// 		});
-	// }, []);
+	useEffect(() => {
+		Location.requestForegroundPermissionsAsync()
+			.then(response => {
+				setPermissionGranted(response.status === 'granted');
+			});
+	}, []);
 
-	// if(!permissionGranted) {
-	// 	return (
-	// 		<View style={styles.container}>
-	// 			<Text style={styles.text}>Waiting for the location permission...</Text>
-	// 			<ActivityIndicator size="large" color="#0000ff" />
-	// 		</View>
-	// 	);
-	// }
-
+	if(!permissionGranted) {
+		return (
+			<View style={styles.container}>
+				<Text style={styles.text}>Waiting for the location permission...</Text>
+				<ActivityIndicator size="large" color="#0000ff" />
+			</View>
+		);
+	}
 	return (
 		<View style={styles.container}>
 			<View style={styles.buttonsContainer}>
@@ -91,12 +91,15 @@ export default function LocationsList(props) {
 							width={250}
 							height="70%"
 							margin={30}
-							padcdingVertical={7}
+							padcdingVertical={5}
+							textHeight='100%'
+							onPress={saveLocationHandler}
 					/>
 					<Button text="Delete all"
 							height="70%"
 							paddingHorizontal={10}
-							paddingVertical={7}
+							paddingVertical={5}
+							textHeight='100%'
 					/>
 				</View>
 				<View style={styles.buttonContainerRow}>
@@ -105,6 +108,7 @@ export default function LocationsList(props) {
 							height="70%"
 							margin={30}
 							paddingVertical={7}
+							textHeight='100%'
 							onPress={() =>
 								props.navigation.navigate("Map")
 							}

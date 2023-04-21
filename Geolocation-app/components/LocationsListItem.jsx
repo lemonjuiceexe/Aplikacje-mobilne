@@ -13,13 +13,15 @@ export default function LocationsListItem(props) {
 	// we can make switch animation actually work, for some weird reason
 	useEffect(() => setShow(props.show), [props.show]);
 
+	const formattedTimestamp = new Date(props.timestamp).toLocaleTimeString();
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.image}>
 				<Text>Obrazek :)</Text>
 			</View>
 			<View style={styles.coordinatesContainer}>
-				<Text style={styles.coordinatesHeader}>Timestamp: {props.timestamp}</Text>
+				<Text style={styles.coordinatesHeader}>Timestamp: {formattedTimestamp}</Text>
 				<Text style={styles.text}>Latitude: {props.latitude}</Text>
 				<Text style={styles.text}>Longitude: {props.longitude}</Text>
 			</View>
@@ -50,5 +52,14 @@ const styles = StyleSheet.create({
 		borderRadius: 50,
 		borderColor: 'black',
 		borderWidth: 1
+	},
+	text: {
+		fontSize: 18,
+		margin: 5
+	},
+	coordinatesHeader: {
+		fontSize: 18,
+		margin: 5,
+		fontWeight: 'bold'
 	}
 });

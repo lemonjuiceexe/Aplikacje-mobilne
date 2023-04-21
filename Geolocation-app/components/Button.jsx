@@ -18,6 +18,8 @@ export default function Button(props) {
 			color: props.textColor ? props.textColor : 'white',
 			fontSize: props.fontSize ? props.fontSize : 20,
 			textAlign: 'center',
+			textAlignVertical: 'center',
+			height: props.textHeight ? props.textHeight : undefined
 		}
 	});
 
