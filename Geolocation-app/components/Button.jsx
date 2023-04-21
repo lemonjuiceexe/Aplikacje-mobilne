@@ -9,8 +9,10 @@ export default function Button(props) {
 			borderRadius: props.borderRadius ? props.borderRadius : 5,
 			marginHorizontal: props.marginHorizontal ? props.marginHorizontal : 5,
 			marginVertical: props.marginVertical ? props.marginVertical : 5,
-			width: props.width ? props.width : '',
-			height: props.height ? props.height : ''
+			textAlign: 'center',
+			textAlignVertical: 'center',
+			width: props.width ? props.width : undefined,
+			height: props.height ? props.height : undefined
 		},
 		buttonText: {
 			color: props.textColor ? props.textColor : 'white',

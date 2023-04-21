@@ -1,23 +1,45 @@
-import {StyleSheet, View, Text, Switch, ActivityIndicator} from "react-native";
+import {StyleSheet, View, Text, FlatList, Switch, ActivityIndicator} from "react-native";
+import {useState, useEffect} from "react";
 
 import Button from "../Button";
+import LocationsListItem from "../LocationsListItem";
 
 export default function LocationsList(props) {
+	const [locations, setLocations] = useState([
+		{
+			timestamp: Date.now(),
+			latitude: 50.01549126131934,
+			longitude: 19.95030437547158
+		}
+	]);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.buttonsContainer}>
 				<View style={styles.buttonContainerRow}>
-					<Button text="Save current location" paddingHorizontal={10} paddingVertical={7} />
+					<Button text="Save current location" margin={30} width={250} height="70%" paddingVertical={7} />
 					<Button text="Delete" paddingHorizontal={10} paddingVertical={7} />
 				</View>
 				<View style={styles.buttonContainerRow}>
-					<Button text="Show me the map" margin={30} paddingHorizontal={15} paddingVertical={7}
+					<Button text="Show me the map" margin={30} width={250} height="70%" paddingVertical={7}
 							onPress={() => props.navigation.navigate("Map")}/>
 					<Switch />
 				</View>
 			</View>
 			<View style={styles.list}>
 				<Text style={styles.text}>List of locations</Text>
+				<FlatList
+					data={locations}
+					renderItem={({item}) =>
+						<LocationsListItem
+							timestamp={item.timestamp}
+							latitude={item.latitude}
+							longitude={item.longitude}
+						/>
+					}
+					keyExtractor={item => item.timestamp.toString()}
+				>
+				</FlatList>
 			</View>
 		</View>
 	);
@@ -33,21 +55,19 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	buttonContainerRow: {
 		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'space-evenly',
+		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
-		borderColor: "black",
-		borderWidth: 1
+		paddingHorizontal: 20
 	},
 	list: {
 		flex: 5,
-		flexDirection: 'column',
-		backgroundColor: '#3F51B5'
+		flexDirection: 'column'
 	},
 
 	text: {
