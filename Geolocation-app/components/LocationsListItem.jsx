@@ -1,6 +1,18 @@
 import {StyleSheet, View, Text, Switch} from "react-native";
+import {useState, useEffect} from "react";
 
 export default function LocationsListItem(props) {
+	const [show, setShow] = useState(props.show);
+	function toggleSwitchHandler() {
+		setShow(previousState => !previousState);
+		props.onShowChange(props.timestamp);
+	}
+
+	// useEffect makes sure that the show state is in sync with the show prop
+	// By doing this weird workaround instead of just using props.show everywhere
+	// we can make switch animation actually work, for some weird reason
+	useEffect(() => setShow(props.show), [props.show]);
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.image}>
@@ -11,7 +23,9 @@ export default function LocationsListItem(props) {
 				<Text style={styles.text}>Latitude: {props.latitude}</Text>
 				<Text style={styles.text}>Longitude: {props.longitude}</Text>
 			</View>
-			<Switch />
+			<Switch value={show}
+					onValueChange={toggleSwitchHandler}
+			/>
 		</View>
 	);
 }
