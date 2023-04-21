@@ -1,8 +1,9 @@
 import {StyleSheet, View, Text, ActivityIndicator} from "react-native";
 import {useState, useEffect} from "react";
-import MapView from "react-native-maps";
+import MapView, {Marker} from "react-native-maps";
 
-export default function Map() {
+export default function Map(props) {
+	console.log(props.route.params.locations);
 	return (
 		<MapView
 			style={styles.container}
@@ -13,6 +14,15 @@ export default function Map() {
 				longitudeDelta: 0.005
 			}}
 		>
+			{props.route.params.locations.map((el, index) =>
+				<Marker title={`Location from ${el.timestamp}`}
+						key={index}
+						coordinate={{
+							latitude: el.latitude,
+							longitude: el.longitude
+						}}
+				/>
+			)}
 		</MapView>
 	);
 }

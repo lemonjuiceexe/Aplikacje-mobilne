@@ -37,8 +37,9 @@ export default function LocationsList(props) {
 		// If any location is off, set allShown to false
 		setAllShown(locations.every(el => el.show));
 	}
+
 	// Toggle for all the locations
-	function showAllToggleHandler(){
+	function showAllToggleHandler() {
 		const valueToSet = !allShown;
 		setLocations(prevState => {
 			const a = prevState.map(el => {
@@ -51,6 +52,7 @@ export default function LocationsList(props) {
 
 		setAllShown(prevState => !prevState);
 	}
+
 	async function saveLocationHandler() {
 		const location = await Location.getCurrentPositionAsync();
 		console.log(location);
@@ -66,6 +68,18 @@ export default function LocationsList(props) {
 			];
 		});
 	}
+	function goToMapHandler() {
+		// Pass only the locations that are shown and only the latitude and longitude
+		props.navigation.navigate("Map", {
+			locations: locations
+				.filter(el => el.show)
+				.map(el => el = {
+					latitude: el.latitude,
+					longitude: el.longitude,
+					timestamp: new Date(el.timestamp).toLocaleTimeString()
+				})
+		})
+	}
 
 	// Request location permission
 	useEffect(() => {
@@ -75,11 +89,11 @@ export default function LocationsList(props) {
 			});
 	}, []);
 
-	if(!permissionGranted) {
+	if (!permissionGranted) {
 		return (
 			<View style={styles.container}>
 				<Text style={styles.text}>Waiting for the location permission...</Text>
-				<ActivityIndicator size="large" color="#0000ff" />
+				<ActivityIndicator size="large" color="#0000ff"/>
 			</View>
 		);
 	}
@@ -109,9 +123,7 @@ export default function LocationsList(props) {
 							margin={30}
 							paddingVertical={7}
 							textHeight='100%'
-							onPress={() =>
-								props.navigation.navigate("Map")
-							}
+							onPress={goToMapHandler}
 					/>
 					<Switch value={allShown}
 							onValueChange={showAllToggleHandler}
