@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, FlatList, Switch, ActivityIndicator} from "react-native";
+import {StyleSheet, View, Text, FlatList, Switch, Alert, ActivityIndicator} from "react-native";
 import {useState, useEffect} from "react";
 import * as Location from "expo-location";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -8,7 +8,7 @@ import LocationsListItem from "../LocationsListItem";
 
 export default function LocationsList(props) {
 	const [locations, setLocations] = useState([]);
-	const [allShown, setAllShown] = useState(true);
+	const [allShown, setAllShown] = useState(false);
 	const [permissionGranted, setPermissionGranted] = useState(false);
 	const [locationsLoaded, setLocationsLoaded] = useState(false);
 
@@ -43,10 +43,13 @@ export default function LocationsList(props) {
 			}).every(el => el.show)
 		);
 	}
+
 	// Toggle for all the locations
 	function showAllToggleHandler() {
 		const valueToSet = !allShown;
-		saveLocationsToStorage(locations.map(el => {return {...el, show: valueToSet}}));
+		saveLocationsToStorage(locations.map(el => {
+			return {...el, show: valueToSet}
+		}));
 		setLocations(prevState => {
 			return prevState.map(el => {
 				el.show = valueToSet;
@@ -56,6 +59,7 @@ export default function LocationsList(props) {
 
 		setAllShown(prevState => !prevState);
 	}
+
 	async function saveLocationHandler() {
 		const location = await Location.getCurrentPositionAsync();
 		const newLocationObject = {
@@ -65,33 +69,78 @@ export default function LocationsList(props) {
 			show: true
 		};
 
-		// Save the new location to the storage
-		saveLocationsToStorage([...locations, newLocationObject]);
+		function saveNewLocation() {
+			// Save the new location to the storage
+			saveLocationsToStorage([...locations, newLocationObject]);
 
-		// Update the state
-		setLocations(prevState => {
-			return [
-				newLocationObject,
-				...prevState
-			];
-		});
+			// Update the states
+			setAllShown(
+				// Use the updated version of locations
+				[newLocationObject, ...locations].every(el => el.show)
+			);
+			setLocations(prevState => {
+				return [
+					newLocationObject,
+					...prevState
+				];
+			});
+		}
+
+		Alert.alert("Location saved",
+			`Latitude: ${newLocationObject.latitude},\n Longitude: ${newLocationObject.longitude} 
+			\n Do you want to save it?`,
+			[
+				{
+					text: "Cancel",
+					style: "cancel"
+				},
+				{
+					text: "Confirm",
+					style: "default",
+					onPress: saveNewLocation
+				}
+			]
+		);
 	}
+
 	function goToMapHandler() {
+		const locationsToPass = locations
+			.filter(el => el.show)
+			.map(el => el = {
+				latitude: el.latitude,
+				longitude: el.longitude,
+				timestamp: new Date(el.timestamp).toLocaleTimeString()
+			});
+		if (locationsToPass.length === 0) {
+			alert("Add and mark at least one location to see it on the map!");
+			return;
+		}
 		// Pass only the locations that are shown and only the latitude and longitude
 		props.navigation.navigate("Map", {
-			locations: locations
-				.filter(el => el.show)
-				.map(el => el = {
-					latitude: el.latitude,
-					longitude: el.longitude,
-					timestamp: new Date(el.timestamp).toLocaleTimeString()
-				})
-		})
+			locations: locationsToPass
+		});
 	}
-	function deleteAllHandler(){
-		saveLocationsToStorage([]);
-		setLocations([]);
-		setAllShown(false);
+
+	function deleteAllHandler() {
+		function deleteAll() {
+			saveLocationsToStorage([]);
+			setLocations([]);
+			setAllShown(false);
+		}
+
+		Alert.alert("Deleting all locations", "Are you sure you want to delete all saved locations?",
+			[
+				{
+					text: "Cancel",
+					style: "cancel"
+				},
+				{
+					text: "confirm",
+					style: "destructive",
+					onPress: deleteAll
+				}
+			]
+		);
 	}
 
 	// ---- Other utility ----
@@ -203,6 +252,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'column',
 		alignItems: 'center',
 		justifyContent: 'center',
+		paddingTop: 5
 	},
 	buttonContainerRow: {
 		flex: 1,
@@ -210,10 +260,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
-		paddingHorizontal: 8
 	},
 	switchUpper: {
-		marginRight: 11.7
+		marginRight: 11.7 // To align it with all the other switches
 	},
 	list: {
 		flex: 5,
