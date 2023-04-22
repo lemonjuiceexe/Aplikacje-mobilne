@@ -1,6 +1,7 @@
 import {StyleSheet, View, Text, FlatList, Switch, ActivityIndicator} from "react-native";
 import {useState, useEffect} from "react";
 import * as Location from "expo-location";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Button from "../Button";
 import LocationsListItem from "../LocationsListItem";
@@ -23,47 +24,67 @@ export default function LocationsList(props) {
 	const [allShown, setAllShown] = useState(true);
 	const [permissionGranted, setPermissionGranted] = useState(false);
 
+	// ---- Button handlers ----
 	// Toggle for a specific location, identified by timestamp
 	function showToggleHandler(timestamp) {
+		saveLocationsToStorage(locations.map(el => {
+				if (el.timestamp === timestamp) {
+					el.show = !el.show;
+				}
+				return el;
+			})
+		);
 		setLocations(previousState => {
 			return previousState.map(el => {
 				if (el.timestamp === timestamp) {
 					el.show = !el.show;
 				}
 				return el;
-			})
+			});
 		});
+
 		// If all locations are on, set allShown to true
 		// If any location is off, set allShown to false
-		setAllShown(locations.every(el => el.show));
+		setAllShown(
+			// Use the updated version of locations
+			locations.map(el => {
+				if (el.timestamp === timestamp) {
+					el.show = !el.show;
+				}
+				return el;
+			}).every(el => el.show)
+		);
 	}
 
 	// Toggle for all the locations
 	function showAllToggleHandler() {
 		const valueToSet = !allShown;
+		saveLocationsToStorage(locations.map(el => {return {...el, show: valueToSet}}));
 		setLocations(prevState => {
-			const a = prevState.map(el => {
+			return prevState.map(el => {
 				el.show = valueToSet;
 				return el;
 			});
-			console.log(a);
-			return a;
 		});
 
 		setAllShown(prevState => !prevState);
 	}
-
 	async function saveLocationHandler() {
 		const location = await Location.getCurrentPositionAsync();
-		console.log(location);
+		const newLocationObject = {
+			timestamp: Date.now(),
+			latitude: location.coords.latitude,
+			longitude: location.coords.longitude,
+			show: true
+		};
+
+		// Save the new location to the storage
+		saveLocationsToStorage([...locations, newLocationObject]);
+
+		// Update the state
 		setLocations(prevState => {
 			return [
-				{
-					timestamp: Date.now(),
-					latitude: location.coords.latitude,
-					longitude: location.coords.longitude,
-					show: true
-				},
+				newLocationObject,
 				...prevState
 			];
 		});
@@ -81,11 +102,27 @@ export default function LocationsList(props) {
 		})
 	}
 
-	// Request location permission
+	// ---- Other utility ----
+	function saveLocationsToStorage(locationsArray) {
+		AsyncStorage.setItem('locations', JSON.stringify(locationsArray))
+			.then(async () => console.log('Current storage: ', await AsyncStorage.getItem('locations')))
+			.catch(err => console.log(err));
+	}
+
 	useEffect(() => {
+		// Request location permission
 		Location.requestForegroundPermissionsAsync()
 			.then(response => {
 				setPermissionGranted(response.status === 'granted');
+			});
+		// Get locations from storage
+		AsyncStorage.getItem('locations')
+			.then(response => {
+				if (response) {
+					const parsedResponse = JSON.parse(response);
+					setLocations(parsedResponse);
+					setAllShown(parsedResponse.every(el => el.show));
+				}
 			});
 	}, []);
 
