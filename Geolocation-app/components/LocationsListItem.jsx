@@ -1,8 +1,9 @@
-import {StyleSheet, View, Text, Switch} from "react-native";
+import {StyleSheet, View, Text, Image, Switch, TouchableOpacity} from "react-native";
 import {useState, useEffect} from "react";
 
 export default function LocationsListItem(props) {
 	const [show, setShow] = useState(props.show);
+
 	function toggleSwitchHandler() {
 		setShow(previousState => !previousState);
 		props.onShowChange(props.timestamp);
@@ -16,19 +17,23 @@ export default function LocationsListItem(props) {
 	const formattedTimestamp = new Date(props.timestamp).toLocaleTimeString();
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.image}>
-				<Text>Obrazek :)</Text>
+			<View style={styles.container}>
+				<View style={styles.imageContainer}>
+		<TouchableOpacity onPress={toggleSwitchHandler}>
+					<Image source={require("../assets/pinpoint.png")} style={styles.image}/>
+		</TouchableOpacity>
+				</View>
+				<View style={styles.coordinatesContainer}>
+					<Text style={styles.coordinatesHeader}>Timestamp: {formattedTimestamp}</Text>
+					<Text style={styles.text}>Latitude: {props.latitude}</Text>
+					<Text style={styles.text}>Longitude: {props.longitude}</Text>
+				</View>
+				<Switch value={show}
+						onValueChange={toggleSwitchHandler}
+						trackColor={{false: "#757575", true: "#81b0ff"}}
+						thumbColor={!show ? "#BDBDBD" : "#FF4081"}
+				/>
 			</View>
-			<View style={styles.coordinatesContainer}>
-				<Text style={styles.coordinatesHeader}>Timestamp: {formattedTimestamp}</Text>
-				<Text style={styles.text}>Latitude: {props.latitude}</Text>
-				<Text style={styles.text}>Longitude: {props.longitude}</Text>
-			</View>
-			<Switch value={show}
-					onValueChange={toggleSwitchHandler}
-			/>
-		</View>
 	);
 }
 
@@ -37,21 +42,24 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		margin: 5,
+		margin: 10,
 		paddingVertical: 10,
-		paddingHorizontal: 15,
+		paddingHorizontal: 5,
 		borderRadius: 5,
-		borderColor: 'black',
-		borderWidth: 1
+		borderWidth: 5,
+		borderColor: '#C5CAE9'
 	},
-	image: {
+	imageContainer: {
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: 100,
-		height: 100,
-		borderRadius: 50,
-		borderColor: 'black',
-		borderWidth: 1
+		flex: 1,
+	},
+	image: {
+		width: 80,
+		height: 80
+	},
+	coordinatesContainer: {
+		flex: 2.5,
 	},
 	text: {
 		fontSize: 18,
@@ -60,6 +68,7 @@ const styles = StyleSheet.create({
 	coordinatesHeader: {
 		fontSize: 18,
 		margin: 5,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
+		color: '#FF4081'
 	}
 });

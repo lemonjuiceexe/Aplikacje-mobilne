@@ -20,7 +20,7 @@ export default function MainPage(props){
 	if(!fontsLoaded){
 		return (
 			<View style={styles.container}>
-				<ActivityIndicator size="large" color="#0000ff" />
+				<ActivityIndicator size="large" color="#fff" />
 			</View>
 		);
 	}
@@ -42,14 +42,14 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: 'center',
-		height: '100%'
+		height: '100%',
+		backgroundColor: "#8996f5"
 	},
 	headerContainer: {
 		flex: 1,
 		flexDirection: 'column',
 		alignItems: 'center',
-		justifyContent: 'center',
-		backgroundColor: '#3F51B5',
+		justifyContent: 'center'
 	},
 	header: {
 		fontFamily: 'dongle-bold',

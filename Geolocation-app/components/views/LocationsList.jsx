@@ -7,22 +7,10 @@ import Button from "../Button";
 import LocationsListItem from "../LocationsListItem";
 
 export default function LocationsList(props) {
-	const [locations, setLocations] = useState([
-		{
-			timestamp: Date.now(),
-			latitude: 50.01549,
-			longitude: 19.95030,
-			show: true
-		},
-		{
-			timestamp: Date.now() - 10,
-			latitude: 50.01549,
-			longitude: 19.95030,
-			show: true
-		}
-	]);
+	const [locations, setLocations] = useState([]);
 	const [allShown, setAllShown] = useState(true);
 	const [permissionGranted, setPermissionGranted] = useState(false);
+	const [locationsLoaded, setLocationsLoaded] = useState(false);
 
 	// ---- Button handlers ----
 	// Toggle for a specific location, identified by timestamp
@@ -55,7 +43,6 @@ export default function LocationsList(props) {
 			}).every(el => el.show)
 		);
 	}
-
 	// Toggle for all the locations
 	function showAllToggleHandler() {
 		const valueToSet = !allShown;
@@ -101,6 +88,11 @@ export default function LocationsList(props) {
 				})
 		})
 	}
+	function deleteAllHandler(){
+		saveLocationsToStorage([]);
+		setLocations([]);
+		setAllShown(false);
+	}
 
 	// ---- Other utility ----
 	function saveLocationsToStorage(locationsArray) {
@@ -123,10 +115,11 @@ export default function LocationsList(props) {
 					setLocations(parsedResponse);
 					setAllShown(parsedResponse.every(el => el.show));
 				}
+				setLocationsLoaded(true);
 			});
 	}, []);
 
-	if (!permissionGranted) {
+	if (!permissionGranted || !locationsLoaded) {
 		return (
 			<View style={styles.container}>
 				<Text style={styles.text}>Waiting for the location permission...</Text>
@@ -138,24 +131,28 @@ export default function LocationsList(props) {
 		<View style={styles.container}>
 			<View style={styles.buttonsContainer}>
 				<View style={styles.buttonContainerRow}>
-					<Button text="Save current location"
-							width={250}
+					<Button text="&#129517; Save my location"
+							backgroundColor="#8996f5"
+							width={235}
 							height="70%"
 							margin={30}
 							padcdingVertical={5}
 							textHeight='100%'
 							onPress={saveLocationHandler}
 					/>
-					<Button text="Delete all"
+					<Button text="&#128465; Delete all"
+							backgroundColor="#8996f5"
 							height="70%"
 							paddingHorizontal={10}
 							paddingVertical={5}
 							textHeight='100%'
+							onPress={deleteAllHandler}
 					/>
 				</View>
 				<View style={styles.buttonContainerRow}>
-					<Button text="Show me the map"
-							width={250}
+					<Button text="&#128506; Show me the map"
+							backgroundColor="#8996f5"
+							width={235}
 							height="70%"
 							margin={30}
 							paddingVertical={7}
@@ -164,11 +161,17 @@ export default function LocationsList(props) {
 					/>
 					<Switch value={allShown}
 							onValueChange={showAllToggleHandler}
+							style={styles.switchUpper}
+							trackColor={{false: "#757575", true: "#81b0ff"}}
+							thumbColor={!allShown ? "#BDBDBD" : "#FF4081"}
 					/>
 				</View>
 			</View>
 			<View style={styles.list}>
-				<Text style={styles.text}>List of locations</Text>
+				<Text style={styles.text}>&#10024;&nbsp;List of locations&nbsp;&#10024;</Text>
+				{locations.length === 0 && <Text style={[styles.text, styles.textSmall]}>
+					It seems you haven't saved any locations yet...
+				</Text>}
 				<FlatList
 					data={locations}
 					renderItem={({item}) =>
@@ -178,6 +181,7 @@ export default function LocationsList(props) {
 							longitude={item.longitude}
 							show={item.show}
 							onShowChange={showToggleHandler}
+							onPress={showToggleHandler}
 						/>
 					}
 					keyExtractor={item => item.timestamp}
@@ -206,17 +210,23 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		width: '100%',
-		paddingHorizontal: 20
+		paddingHorizontal: 8
+	},
+	switchUpper: {
+		marginRight: 11.7
 	},
 	list: {
 		flex: 5,
 		flexDirection: 'column'
 	},
-
 	text: {
 		fontSize: 25,
 		margin: 20,
 		textAlign: 'center',
 		lineHeight: 35
+	},
+	textSmall: {
+		fontSize: 22,
+		paddingHorizontal: 20,
 	}
 });

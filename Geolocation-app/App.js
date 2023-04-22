@@ -22,13 +22,13 @@ export default function App() {
 				<Stack.Screen name="LocationsList"
 							  component={LocationsList}
 							  options={{
-								  headerTitle: "List of locations"
+								  headerTitle: "List of locations",
 							  }}
 				/>
 				<Stack.Screen name="Map"
 							  component={Map}
 							  options={{
-								  headerTitle: "Map"
+								  headerTitle: "Map",
 							  }}
 				/>
 			</Stack.Navigator>
