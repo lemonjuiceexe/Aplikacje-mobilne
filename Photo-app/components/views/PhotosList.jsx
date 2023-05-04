@@ -4,7 +4,7 @@ import {useState, useEffect} from "react";
 
 import Button from "../Button";
 
-export default function PhotosList() {
+export default function PhotosList(props) {
 	const [filesPermission, setFilesPermission] = useState(false);
 	const [photos, setPhotos] = useState([]);
 
@@ -54,13 +54,14 @@ export default function PhotosList() {
 		<View style={styles.container}>
 			<View style={styles.buttonsContainer}>
 				<View style={styles.buttonContainerRow}>
-					<Button text="&#x1FA9F;"
+					<Button text="&#x1FA9F;" // Layout button
 							{...styles.button}
 					/>
-					<Button text="&#x1F4F8;"
+					<Button text="&#x1F4F8;" // Camera button
 							{...styles.button}
+							onPress={() => props.navigation.navigate("Camera")}
 					/>
-					<Button text="&#x1F5D1;"
+					<Button text="&#x1F5D1;" // Delete button
 							{...styles.button}
 					/>
 				</View>
