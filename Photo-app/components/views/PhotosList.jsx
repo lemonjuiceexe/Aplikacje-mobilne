@@ -3,12 +3,14 @@ import * as ExpoMediaLibrary from 'expo-media-library';
 import {useState, useEffect} from "react";
 
 import Button from "../Button";
+import {createAlbumAsync, getAlbumAsync, getAssetsAsync} from "expo-media-library";
 
 export default function PhotosList(props) {
 	const [filesPermission, setFilesPermission] = useState(false);
 	const [photos, setPhotos] = useState([]);
 
 	const PHOTOS_AMOUNT = 30;
+	const DIRECTORY_NAME = "PhotoApp";
 
 	useEffect(() => {
 		async function getPermission() {
@@ -25,19 +27,30 @@ export default function PhotosList(props) {
 		});
 	}, []);
 	useEffect(() => {
-		async function getPhotos() {
+		async function getOrCreateDirectory(directoryName) {
+			// If directory exists, return it
+			if ((await getAlbumAsync(directoryName)) !== null) return getAlbumAsync(directoryName);
+			// On Android it's impossible to create an empty directory, so we need to create it with a sample asset
+			const sampleAsset = (await getAssetsAsync()).assets[2];
+			return createAlbumAsync("PhotoApp", sampleAsset);
+		}
+		async function getPhotos(albumRef) {
 			return await ExpoMediaLibrary.getAssetsAsync({
 				first: PHOTOS_AMOUNT,
+				album: albumRef,
 				mediaType: ExpoMediaLibrary.MediaType.photo,
 				sortBy: [ExpoMediaLibrary.SortBy.modificationTime]
 			});
 		}
 		// If got permission, get photos
 		if (filesPermission) {
-			getPhotos()
-				.then((res) => {
-					setPhotos(res.assets);
-				});
+			getOrCreateDirectory(DIRECTORY_NAME).then(directory => {
+				getPhotos(directory)
+					.then((res) => {
+						setPhotos(res.assets);
+					});
+			})
+				.catch(error => console.log(error));
 		}
 	}, [filesPermission]);
 
@@ -67,7 +80,7 @@ export default function PhotosList(props) {
 				</View>
 			</View>
 			<View style={styles.list}>
-				<FlatList
+				{photos.length !== 0 && <FlatList
 					data={photos}
 					renderItem={({item}) => (
 						<TouchableOpacity style={styles.singleImageContainer}>
@@ -78,7 +91,8 @@ export default function PhotosList(props) {
 					keyExtractor={item => item.id}
 					numColumns={3}
 					contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center'}}
-				/>
+				/>}
+				{photos.length === 0 && <Text style={styles.warningText}>No photos in directory</Text>}
 			</View>
 		</View>
 	);
@@ -139,6 +153,12 @@ const styles = StyleSheet.create({
 		margin: 20,
 		textAlign: 'center',
 		lineHeight: 35,
+		color: '#fff'
+	},
+	warningText: {
+		fontSize: 25,
+		width: '100%',
+		textAlign: 'center',
 		color: '#fff'
 	}
 });
