@@ -1,4 +1,4 @@
-import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity,  ToastAndroid, ActivityIndicator} from "react-native";
+import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity, ToastAndroid, Dimensions, ActivityIndicator} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
@@ -10,6 +10,7 @@ import {createAlbumAsync, getAlbumAsync, getAssetsAsync} from "expo-media-librar
 export default function PhotosList(props) {
 	const [filesPermission, setFilesPermission] = useState(false);
 	const [photos, setPhotos] = useState([]);
+	const [gridView, setGridView] = useState(true);
 	const isFocused = useIsFocused();
 
 	const PHOTOS_AMOUNT = 30;
@@ -64,8 +65,10 @@ export default function PhotosList(props) {
 		}
 	}
 
+	function toggleViewHandler(){
+		setGridView(prevState => !prevState);
+	}
 	async function deleteHandler(){
-		console.log("asd");
 		ExpoMediaLibrary.deleteAssetsAsync(photos.filter(el => el.selected))
 			.then(refreshPhotos)
 			.catch(error => console.log(error));
@@ -86,6 +89,7 @@ export default function PhotosList(props) {
 				<View style={styles.buttonContainerRow}>
 					<Button text="&#x1FA9F;" // Layout button
 							{...styles.button}
+							onPress={toggleViewHandler}
 					/>
 					<Button text="&#x1F4F8;" // Camera button
 							{...styles.button}
@@ -97,11 +101,14 @@ export default function PhotosList(props) {
 					/>
 				</View>
 			</View>
-			<View style={styles.list}>
+			<View style={gridView ? styles.list : styles.listListView}>
 				{photos.length !== 0 && <FlatList
 					data={photos}
+					style={{width: '100%'}}
 					renderItem={({item}) => (
-						<TouchableOpacity style={styles.singleImageContainer}>
+						<TouchableOpacity style={
+							gridView ? styles.singleImageContainer : styles.singleImageListContainer
+						}>
 							<BouncyCheckbox style={styles.checkbox}
 											fillColor={"#E91E63"}
 											isChecked={item.selected}
@@ -111,7 +118,7 @@ export default function PhotosList(props) {
 													prevState.map(el => el.id === item.id ? item : el))
 											}}
 							/>
-							<Image style={{width: 100, height: 100}}
+							<Image style={gridView ? {width: 100, height: 100} : styles.imageListView}
 								   source={{uri: item.uri}} />
 							<Text style={styles.imageText}>
 								{item.id}
@@ -119,7 +126,8 @@ export default function PhotosList(props) {
 						</TouchableOpacity>
 					)}
 					keyExtractor={item => item.id}
-					numColumns={3}
+					key={gridView ? "grid" : "list"}
+					numColumns={gridView ? 3 : 1}
 					contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center'}}
 				/>}
 				{photos.length === 0 && <Text style={styles.warningText}>No photos in directory</Text>}
@@ -161,13 +169,29 @@ const styles = StyleSheet.create({
 		flex: 5,
 		flexDirection: 'row',
 		alignItems: 'center',
-		justifyContent: 'space-between',
+		justifyContent: 'flex-start',
 		width: "100%"
+	},
+	listListView: {
+		flex: 5,
+		flexDirection: 'column',
+		alignItems: 'flex-start',
+		width: '100%'
 	},
 	singleImageContainer: {
 		margin: 4,
 		borderWidth: 2,
+		borderColor: "#E91E63"
+	},
+	singleImageListContainer: {
 		borderColor: "#E91E63",
+		borderWidth: 2,
+		margin: 15,
+		width: Dimensions.get("window").width - 15
+	},
+	imageListView: {
+		width: '100%',
+		aspectRatio: 4 / 3
 	},
 	checkbox: {
 		position: "absolute",
