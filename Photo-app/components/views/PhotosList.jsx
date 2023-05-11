@@ -1,4 +1,5 @@
 import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity, ToastAndroid, ActivityIndicator} from "react-native";
+import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
 import {useState, useEffect} from "react";
 
@@ -8,6 +9,7 @@ import {createAlbumAsync, getAlbumAsync, getAssetsAsync} from "expo-media-librar
 export default function PhotosList(props) {
 	const [filesPermission, setFilesPermission] = useState(false);
 	const [photos, setPhotos] = useState([]);
+	const isFocused = useIsFocused();
 
 	const PHOTOS_AMOUNT = 30;
 	const DIRECTORY_NAME = "PhotoApp";
@@ -26,6 +28,7 @@ export default function PhotosList(props) {
 			}
 		});
 	}, []);
+	// Fetch photos when permissions granted or entered the view (isFocused)
 	useEffect(() => {
 		async function getOrCreateDirectory(directoryName) {
 			// If directory exists, return it
@@ -52,7 +55,7 @@ export default function PhotosList(props) {
 			})
 				.catch(error => console.log(error));
 		}
-	}, [filesPermission]);
+	}, [filesPermission, isFocused]);
 
 	if (!filesPermission) {
 		return (
@@ -72,7 +75,7 @@ export default function PhotosList(props) {
 					/>
 					<Button text="&#x1F4F8;" // Camera button
 							{...styles.button}
-							onPress={() => props.navigation.navigate("Camera")}
+							onPress={() => props.navigation.navigate("Camera", {DIRECTORY_NAME: DIRECTORY_NAME})}
 					/>
 					<Button text="&#x1F5D1;" // Delete button
 							{...styles.button}
