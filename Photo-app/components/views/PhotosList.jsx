@@ -1,4 +1,14 @@
-import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity, ToastAndroid, Dimensions, ActivityIndicator} from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	Image,
+	FlatList,
+	TouchableOpacity,
+	ToastAndroid,
+	Dimensions,
+	ActivityIndicator
+} from "react-native";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
@@ -35,7 +45,7 @@ export default function PhotosList(props) {
 		refreshPhotos().catch(error => console.log(error));
 	}, [filesPermission, isFocused]);
 
-	async function refreshPhotos(){
+	async function refreshPhotos() {
 		async function getOrCreateDirectory(directoryName) {
 			// If directory exists, return it
 			if ((await getAlbumAsync(directoryName)) !== null) return getAlbumAsync(directoryName);
@@ -43,6 +53,7 @@ export default function PhotosList(props) {
 			const sampleAsset = (await getAssetsAsync()).assets[2];
 			return createAlbumAsync("PhotoApp", sampleAsset);
 		}
+
 		async function getPhotos(albumRef) {
 			return await ExpoMediaLibrary.getAssetsAsync({
 				first: PHOTOS_AMOUNT,
@@ -51,6 +62,7 @@ export default function PhotosList(props) {
 				sortBy: [ExpoMediaLibrary.SortBy.modificationTime]
 			});
 		}
+
 		// If got permission, get photos
 		if (filesPermission) {
 			getOrCreateDirectory(DIRECTORY_NAME).then(directory => {
@@ -65,10 +77,16 @@ export default function PhotosList(props) {
 		}
 	}
 
-	function toggleViewHandler(){
+	function selectPhotoHandler(item) {
+		item.selected = !item.selected;
+		setPhotos(prevState =>
+			prevState.map(el => el.id === item.id ? item : el)
+		)
+	}
+	function toggleViewHandler() {
 		setGridView(prevState => !prevState);
 	}
-	async function deleteHandler(){
+	async function deleteHandler() {
 		ExpoMediaLibrary.deleteAssetsAsync(photos.filter(el => el.selected))
 			.then(refreshPhotos)
 			.catch(error => console.log(error));
@@ -107,20 +125,18 @@ export default function PhotosList(props) {
 					style={{width: '100%'}}
 					renderItem={({item}) => (
 						<TouchableOpacity
-							style={ gridView ? styles.singleImageContainer : styles.singleImageListContainer}
+							style={gridView ? styles.singleImageContainer : styles.singleImageListContainer}
 							onPress={() => props.navigation.navigate("PhotoDetails", {photo: item})}
+							onLongPress={() => selectPhotoHandler(item)}
 						>
 							<BouncyCheckbox style={styles.checkbox}
 											fillColor={"#E91E63"}
 											isChecked={item.selected}
-											onPress={() => {
-												item.selected = !item.selected;
-												setPhotos(prevState =>
-													prevState.map(el => el.id === item.id ? item : el))
-											}}
+											disableBuiltInState={true}
+											onPress={() => selectPhotoHandler(item)}
 							/>
 							<Image style={gridView ? {width: 100, height: 100} : styles.imageListView}
-								   source={{uri: item.uri}} />
+								   source={{uri: item.uri}}/>
 							<Text style={styles.imageText}>
 								{item.id}
 							</Text>
