@@ -106,9 +106,10 @@ export default function PhotosList(props) {
 					data={photos}
 					style={{width: '100%'}}
 					renderItem={({item}) => (
-						<TouchableOpacity style={
-							gridView ? styles.singleImageContainer : styles.singleImageListContainer
-						}>
+						<TouchableOpacity
+							style={ gridView ? styles.singleImageContainer : styles.singleImageListContainer}
+							onPress={() => props.navigation.navigate("PhotoDetails", {photo: item})}
+						>
 							<BouncyCheckbox style={styles.checkbox}
 											fillColor={"#E91E63"}
 											isChecked={item.selected}
@@ -170,13 +171,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		alignItems: 'center',
 		justifyContent: 'flex-start',
-		width: "100%"
+		width: "100%",
+		paddingVertical: 15,
 	},
 	listListView: {
 		flex: 5,
 		flexDirection: 'column',
 		alignItems: 'flex-start',
-		width: '100%'
+		width: '100%',
+		paddingVertical: 15
 	},
 	singleImageContainer: {
 		margin: 4,

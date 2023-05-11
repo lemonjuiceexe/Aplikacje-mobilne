@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from "@react-navigation/native-stack";
 
 import MainPage from './components/views/MainPage';
 import PhotosList from './components/views/PhotosList';
-// import PhotoDetails from './components/views/Photo';
+import PhotoDetails from './components/views/PhotoDetails';
 import CameraScreen from './components/views/CameraScreen';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +22,12 @@ export default function App() {
 							  component={PhotosList}
 							  options={{
 								  headerTitle: "Gallery",
+							  }}
+				/>
+				<Stack.Screen name="PhotoDetails"
+							  component={PhotoDetails}
+							  options={{
+								  headerTitle: "Photo"
 							  }}
 				/>
 				<Stack.Screen name="Camera"
