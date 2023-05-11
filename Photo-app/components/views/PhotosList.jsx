@@ -1,4 +1,5 @@
-import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity, ToastAndroid, ActivityIndicator} from "react-native";
+import {StyleSheet, View, Text, Image, FlatList, TouchableOpacity,  ToastAndroid, ActivityIndicator} from "react-native";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
 import {useState, useEffect} from "react";
@@ -30,6 +31,10 @@ export default function PhotosList(props) {
 	}, []);
 	// Fetch photos when permissions granted or entered the view (isFocused)
 	useEffect(() => {
+		refreshPhotos().catch(error => console.log(error));
+	}, [filesPermission, isFocused]);
+
+	async function refreshPhotos(){
 		async function getOrCreateDirectory(directoryName) {
 			// If directory exists, return it
 			if ((await getAlbumAsync(directoryName)) !== null) return getAlbumAsync(directoryName);
@@ -50,12 +55,21 @@ export default function PhotosList(props) {
 			getOrCreateDirectory(DIRECTORY_NAME).then(directory => {
 				getPhotos(directory)
 					.then((res) => {
+						// Add a new `selected` property to each photo, representing user selection
+						res.assets.map(el => el.selected = false);
 						setPhotos(res.assets);
 					});
 			})
 				.catch(error => console.log(error));
 		}
-	}, [filesPermission, isFocused]);
+	}
+
+	async function deleteHandler(){
+		console.log("asd");
+		ExpoMediaLibrary.deleteAssetsAsync(photos.filter(el => el.selected))
+			.then(refreshPhotos)
+			.catch(error => console.log(error));
+	}
 
 	if (!filesPermission) {
 		return (
@@ -79,6 +93,7 @@ export default function PhotosList(props) {
 					/>
 					<Button text="&#x1F5D1;" // Delete button
 							{...styles.button}
+							onPress={deleteHandler}
 					/>
 				</View>
 			</View>
@@ -87,8 +102,20 @@ export default function PhotosList(props) {
 					data={photos}
 					renderItem={({item}) => (
 						<TouchableOpacity style={styles.singleImageContainer}>
-							<Image source={{uri: item.uri}} style={{width: 100, height: 100}}/>
-							<Text style={styles.imageText}>{item.id}</Text>
+							<BouncyCheckbox style={styles.checkbox}
+											fillColor={"#E91E63"}
+											isChecked={item.selected}
+											onPress={() => {
+												item.selected = !item.selected;
+												setPhotos(prevState =>
+													prevState.map(el => el.id === item.id ? item : el))
+											}}
+							/>
+							<Image style={{width: 100, height: 100}}
+								   source={{uri: item.uri}} />
+							<Text style={styles.imageText}>
+								{item.id}
+							</Text>
 						</TouchableOpacity>
 					)}
 					keyExtractor={item => item.id}
@@ -141,6 +168,12 @@ const styles = StyleSheet.create({
 		margin: 4,
 		borderWidth: 2,
 		borderColor: "#E91E63",
+	},
+	checkbox: {
+		position: "absolute",
+		top: 5,
+		left: 5,
+		zIndex: 1,
 	},
 	imageText: {
 		position: "absolute",
