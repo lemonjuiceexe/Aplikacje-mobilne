@@ -1,4 +1,4 @@
-import {View, Image, StyleSheet} from 'react-native';
+import {View, Image, Text, StyleSheet} from 'react-native';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoSharing from 'expo-sharing';
 import Button from "../Button";
@@ -24,6 +24,9 @@ export default function PhotoDetails(props) {
 				source={{uri: props.route.params.photo.uri}}
 				style={styles.image}
 			/>
+			<Text style={styles.text}>
+				{props.route.params.photo.width} x {props.route.params.photo.height}
+			</Text>
 			<View style={styles.buttonsWrapper}>
 				<Button text="Share"
 						onPress={sharePhotoHandler}
@@ -49,6 +52,11 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		borderColor: "#fff",
 		borderWidth: 2
+	},
+	text: {
+		color: "#fff",
+		fontSize: 25,
+		marginTop: 15
 	},
 	buttonsWrapper: {
 		flexDirection: 'row',
