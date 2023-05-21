@@ -1,25 +1,35 @@
-import {View, Text, StyleSheet } from 'react-native';
+import {View, Text, StyleSheet} from 'react-native';
 import RadioButton from "./RadioButton";
 
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function RadioGroup(props) {
-	console.log(props);
+	// console.log(props);
+	const optionName = props.title[0].toLowerCase() + props.title.slice(1);
 	const [options, setOptions] = useState(props.options);
-	function radioToggleHandler(buttonId){
-		setOptions(prevState => prevState.active = buttonId);
+	const [activeElement, setActiveElement] = useState(props.active);
+
+	function radioToggleHandler(buttonOption) {
+		console.log('setActive', buttonOption);
+		setActiveElement(buttonOption);
+		props.onToggle(optionName, buttonOption);
 	}
 
-	if(!options || Object.keys(options).length === 0) return;
+	if (!options || Object.keys(options).length === 0) return;
 
 	return (
 		<View>
 			<Text style={styles.radioGroupTitle}>{props.title}</Text>
-			{options && Object.keys(options).map((option) =>
-				<View style={styles.inputGroup}>
-					<RadioButton active={false} onToggle={() => radioToggleHandler(options[option])}/>
-					<Text style={styles.text}>{option}</Text>
-				</View>
+			{options && Object.keys(options).map((option) => {
+					if (option === "active") return;
+					return <View style={styles.inputGroup} key={Math.random()}>
+						<RadioButton active={activeElement === options[option]}
+									 onToggle={radioToggleHandler}
+									 id={options[option]}
+						/>
+						<Text style={styles.text}>{option}</Text>
+					</View>;
+				}
 			)}
 		</View>
 	);

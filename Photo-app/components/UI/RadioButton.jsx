@@ -2,6 +2,7 @@ import { View, TouchableOpacity, StyleSheet} from "react-native";
 
 export default function RadioButton(props) {
 	function toggleHandler(){
+		console.log("click on ", props.id);
 		props.onToggle(props.id);
 	}
 

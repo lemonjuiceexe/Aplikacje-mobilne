@@ -15,11 +15,28 @@ import {useState, useEffect, useRef} from 'react';
 import RadioGroup from "../UI/RadioGroup";
 
 export default function CameraScreen(props) {
+	const CAMERA_RATIOS = {"16:9": 1, "4:3": 0}
+	const DEFAULT_VALUES = {
+		"FlashMode": "off",
+		"AutoFocus": "on",
+		"WhiteBalance": "incandescent",
+		"VideoQuality": "4:3",
+		"CameraRatio": "4:3",
+		"Type": "back",
+	}
+
 	const [cameraPermission, setCameraPermission] = useState(false);
-	const [cameraReverted, setCameraReverted] = useState(false);
 	const [settingsShown, setSettingsShown] = useState(false);
 	const [settingsWrapperOffset, setSettingsWrapperOffset] = useState(new Animated.Value(660));
 	const [cameraSettings, setCameraSettings] = useState({});
+
+	const [cameraReverted, setCameraReverted] = useState(false);
+	const [flashMode, setFlashMode] = useState("off");
+	const [autoFocus, setAutoFocus] = useState("on");
+	const [whiteBalance, setWhiteBalance] = useState("incandescent");
+	const [videoQuality, setVideoQuality] = useState("4:3");
+	const [cameraRatio, setCameraRatio] = useState("4:3");
+
 	const cameraRef = useRef(null);
 
 	function revertCameraHandler() {
@@ -50,6 +67,34 @@ export default function CameraScreen(props) {
 		// setSettingsWrapperHeight(prevState => prevState === '0%' ? '83%' : '0%');
 
 	}
+	function cameraOptionChangeHandler(option, value){
+		switch(option){
+			case "type":
+				revertCameraHandler();
+				console.log('chang');
+				break;
+			case "flashMode":
+				setFlashMode(value);
+				console.log('chang');
+				break;
+			case "autoFocus":
+				setAutoFocus(value);
+				console.log('chang');
+				break;
+			case "whiteBalance":
+				setWhiteBalance(value);
+				console.log('chang');
+				break;
+			case "videoQuality":
+				setVideoQuality(value);
+				console.log('chang');
+				break;
+			case "cameraRatio":
+				setCameraRatio(value);
+				console.log(value);
+				break;
+		}
+	}
 
 	useEffect(() => {
 		async function getPermission() {
@@ -75,17 +120,30 @@ export default function CameraScreen(props) {
 	return (
 		<View style={styles.container}>
 			<StatusBar/>
-			<ExpoCamera.Camera style={styles.camera}
+			<ExpoCamera.Camera style={{...styles.camera, aspectRatio: cameraRatio === "16:9" ? 9 / 16 : 3 / 4}}
 							   type={cameraReverted ?
 								   ExpoCamera.Camera.Constants.Type.front :
 								   ExpoCamera.Camera.Constants.Type.back}
+							   flashMode={flashMode}
+							   autoFocus={autoFocus}
+							   whiteBalance={whiteBalance}
+							   ratio={cameraRatio === 0 ? "4:3" : "16:9"}
 							   ref={cameraRef}
-							   onCameraReady={() => setCameraSettings(ExpoCamera.Camera.Constants)}
+							   onCameraReady={() =>
+							   {
+								   setCameraSettings(
+									   {
+										   ...ExpoCamera.Camera.Constants,
+										   "CameraRatio": CAMERA_RATIOS,
+									   }
+								   );
+								   console.log(ExpoCamera.Camera.Constants);
+							   }}
 			/>
 
 			{/* Navigation and action buttons */}
 			<TouchableOpacity style={[styles.button, styles.buttonShutter,
-									{ pointerEvents: settingsShown ? "none" : "auto" }
+				{pointerEvents: settingsShown ? "none" : "auto"}
 			]} /* Shutter button */
 							  onPress={takePhotoHandler}>
 				<Text style={styles.text}></Text>
@@ -99,7 +157,7 @@ export default function CameraScreen(props) {
 				<Text style={styles.textSettings}>&#x2699;</Text>
 			</TouchableOpacity>
 			<TouchableOpacity style={[styles.button, styles.buttonRevert,
-									{ pointerEvents: settingsShown ? "none" : "auto" }
+				{pointerEvents: settingsShown ? "none" : "auto"}
 			]} /* Revert camera button */
 							  onPress={revertCameraHandler}>
 				<Text style={styles.text}>&#x21BA;</Text>
@@ -113,10 +171,16 @@ export default function CameraScreen(props) {
 				}
 			]}>
 				<ScrollView>
-				<Text style={styles.textSettingsTitle}>Settings</Text>
-				{cameraSettings && Object.values(cameraSettings).map((setting, i) =><>
-					<RadioGroup key={Math.random()} title={Object.keys(cameraSettings)[i]} options={setting} /></>
-				)}
+					<Text style={styles.textSettingsTitle}>Settings</Text>
+					{cameraSettings && Object.values(cameraSettings).map((setting, i) =>
+						<RadioGroup
+							key={Math.random()}
+							title={Object.keys(cameraSettings)[i]}
+							options={setting}
+							active={setting !== undefined ? setting[DEFAULT_VALUES[Object.keys(cameraSettings)[i]]] : 0}
+							onToggle={cameraOptionChangeHandler}
+						/>
+					)}
 				</ScrollView>
 			</Animated.View>
 		</View>
@@ -131,8 +195,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	},
 	camera: {
-		width: '100%',
-		aspectRatio: 3/4
+		width: '100%'
 	},
 	button: {
 		position: "absolute",
