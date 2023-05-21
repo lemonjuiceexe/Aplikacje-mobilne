@@ -1,7 +1,7 @@
 import {View, Image, Text, StyleSheet} from 'react-native';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoSharing from 'expo-sharing';
-import Button from "../Button";
+import Button from "../UI/Button";
 
 export default function PhotoDetails(props) {
 	async function sharePhotoHandler(){

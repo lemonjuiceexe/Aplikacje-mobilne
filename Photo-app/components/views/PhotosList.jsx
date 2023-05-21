@@ -14,7 +14,7 @@ import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
 import {useState, useEffect} from "react";
 
-import Button from "../Button";
+import Button from "../UI/Button";
 import {createAlbumAsync, getAlbumAsync, getAssetsAsync} from "expo-media-library";
 
 export default function PhotosList(props) {
