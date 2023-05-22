@@ -71,28 +71,109 @@ export default function CameraScreen(props) {
 		switch(option){
 			case "type":
 				revertCameraHandler();
-				console.log('chang');
 				break;
 			case "flashMode":
 				setFlashMode(value);
-				console.log('chang');
 				break;
 			case "autoFocus":
 				setAutoFocus(value);
-				console.log('chang');
 				break;
 			case "whiteBalance":
 				setWhiteBalance(value);
-				console.log('chang');
 				break;
 			case "videoQuality":
 				setVideoQuality(value);
-				console.log('chang');
 				break;
 			case "cameraRatio":
 				setCameraRatio(value);
-				console.log(value);
 				break;
+		}
+	}
+	function indexToState(index){
+		switch(index){
+			case 0:
+				return cameraReverted;
+			case 1:
+				return flashMode;
+			case 2:
+				return autoFocus;
+			case 3:
+				return whiteBalance;
+			case 4:
+				return videoQuality;
+			case 5:
+				return cameraRatio;
+		}
+	}
+	function indexToParam(index){
+		switch(index){
+			case 0:
+				return "Type";
+			case 1:
+				return "FlashMode";
+			case 2:
+				return "AutoFocus";
+			case 3:
+				return "WhiteBalance";
+			case 4:
+				return "VideoQuality";
+			case 5:
+				return "CameraRatio";
+		}
+	}
+	function valueToIndex(param, value){
+		switch(param){
+			case "Type":
+				return value === "back" ? 0 : 1;
+			case "FlashMode":
+				switch(value){
+					case "off":
+						return 0;
+					case "on":
+						return 1;
+					case "auto":
+						return 3;
+					case "torch":
+						return 2;
+					default:
+						return -300;
+				}
+			case "AutoFocus":
+				return value === "on";
+			case "WhiteBalance":
+				switch(value){
+					case "auto":
+						return 0;
+					case "sunny":
+						return 2;
+					case "cloudy":
+						return 1;
+					case "shadow":
+						return 3;
+					case "incandescent":
+						return 5;
+					case "fluorescent":
+						return 4;
+					default:
+						return -300;
+				}
+			case "VideoQuality":
+				switch(value){
+					case "1080p":
+						return 1;
+					case "720p":
+						return 2;
+					case "480p":
+						return 3;
+					case "4:3":
+						return 4;
+					case "2160p":
+						return 0;
+					default:
+						return -300;
+				}
+			case "CameraRatio":
+				return value === "16:9" ? 0 : 1;
 		}
 	}
 
@@ -137,7 +218,6 @@ export default function CameraScreen(props) {
 										   "CameraRatio": CAMERA_RATIOS,
 									   }
 								   );
-								   console.log(ExpoCamera.Camera.Constants);
 							   }}
 			/>
 
@@ -177,7 +257,7 @@ export default function CameraScreen(props) {
 							key={Math.random()}
 							title={Object.keys(cameraSettings)[i]}
 							options={setting}
-							active={setting !== undefined ? setting[DEFAULT_VALUES[Object.keys(cameraSettings)[i]]] : 0}
+							active={setting !== undefined ? valueToIndex(indexToParam(i), indexToState(i)) : 1}
 							onToggle={cameraOptionChangeHandler}
 						/>
 					)}

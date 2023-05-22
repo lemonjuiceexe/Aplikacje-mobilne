@@ -4,16 +4,22 @@ import RadioButton from "./RadioButton";
 import {useEffect, useState} from "react";
 
 export default function RadioGroup(props) {
-	// console.log(props);
+	console.log(props.options);
+	console.log(props.active);
 	const optionName = props.title[0].toLowerCase() + props.title.slice(1);
 	const [options, setOptions] = useState(props.options);
 	const [activeElement, setActiveElement] = useState(props.active);
 
 	function radioToggleHandler(buttonOption) {
-		console.log('setActive', buttonOption);
-		setActiveElement(buttonOption);
+		console.log("NEWACTIVE", buttonOption);
 		props.onToggle(optionName, buttonOption);
+		setActiveElement(buttonOption);
+		props.active = buttonOption;
 	}
+
+	useEffect(() => {
+		setTimeout( () => setActiveElement(props.active), 500);
+	}, [props.active])
 
 	if (!options || Object.keys(options).length === 0) return;
 

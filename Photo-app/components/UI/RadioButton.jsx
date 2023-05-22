@@ -1,8 +1,9 @@
 import { View, TouchableOpacity, StyleSheet} from "react-native";
 
+import { useState } from "react";
+
 export default function RadioButton(props) {
 	function toggleHandler(){
-		console.log("click on ", props.id);
 		props.onToggle(props.id);
 	}
 
