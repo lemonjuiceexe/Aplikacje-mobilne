@@ -4,22 +4,25 @@ import RadioButton from "./RadioButton";
 import {useEffect, useState} from "react";
 
 export default function RadioGroup(props) {
-	console.log(props.options);
-	console.log(props.active);
+	if(props.title === "CameraRatio") console.log('props.active z gory', props.active);
+	// props.active = props.active === undefined ? 1 : props.active;
+	// props.active = props.active === -300 ? 0 : props.active;
+	// let defValue = props.active;
 	const optionName = props.title[0].toLowerCase() + props.title.slice(1);
 	const [options, setOptions] = useState(props.options);
-	const [activeElement, setActiveElement] = useState(props.active);
+	// const [activeElement, setActiveElement] = useState(defValue);
 
 	function radioToggleHandler(buttonOption) {
-		console.log("NEWACTIVE", buttonOption);
+		console.log('hi id like to set ', buttonOption);
 		props.onToggle(optionName, buttonOption);
-		setActiveElement(buttonOption);
-		props.active = buttonOption;
+		// setActiveElement(buttonOption);
+		// props.active = buttonOption;
+		// defValue = buttonOption;
 	}
 
-	useEffect(() => {
-		setTimeout( () => setActiveElement(props.active), 500);
-	}, [props.active])
+	// useEffect(() => {
+	// 	console.log("NEWACTIVEaa", activeElement);
+	// }, [activeElement]);
 
 	if (!options || Object.keys(options).length === 0) return;
 
@@ -28,8 +31,9 @@ export default function RadioGroup(props) {
 			<Text style={styles.radioGroupTitle}>{props.title}</Text>
 			{options && Object.keys(options).map((option) => {
 					if (option === "active") return;
+					if(props.title === "CameraRatio") console.log('option', option, 'active', props.active, 'options[option]', options[option])
 					return <View style={styles.inputGroup} key={Math.random()}>
-						<RadioButton active={activeElement === options[option]}
+						<RadioButton active={props.active === options[option]}
 									 onToggle={radioToggleHandler}
 									 id={options[option]}
 						/>

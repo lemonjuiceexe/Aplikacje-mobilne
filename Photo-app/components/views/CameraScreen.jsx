@@ -22,7 +22,7 @@ export default function CameraScreen(props) {
 		"WhiteBalance": "incandescent",
 		"VideoQuality": "4:3",
 		"CameraRatio": "4:3",
-		"Type": "back",
+		"Type": "back"
 	}
 
 	const [cameraPermission, setCameraPermission] = useState(false);
@@ -30,12 +30,12 @@ export default function CameraScreen(props) {
 	const [settingsWrapperOffset, setSettingsWrapperOffset] = useState(new Animated.Value(660));
 	const [cameraSettings, setCameraSettings] = useState({});
 
-	const [cameraReverted, setCameraReverted] = useState(false);
-	const [flashMode, setFlashMode] = useState("off");
-	const [autoFocus, setAutoFocus] = useState("on");
-	const [whiteBalance, setWhiteBalance] = useState("incandescent");
-	const [videoQuality, setVideoQuality] = useState("4:3");
-	const [cameraRatio, setCameraRatio] = useState("4:3");
+	const [cameraReverted, setCameraReverted] = useState(valueToIndex("Type", "back"));
+	const [flashMode, setFlashMode] = useState(valueToIndex("FlashMode", "off"));
+	const [autoFocus, setAutoFocus] = useState(valueToIndex("AutoFocus", "on"));
+	const [whiteBalance, setWhiteBalance] = useState(valueToIndex("WhiteBalance", "incandescent"));
+	const [videoQuality, setVideoQuality] = useState(valueToIndex("VideoQuality", "4:3"));
+	const [cameraRatio, setCameraRatio] = useState(valueToIndex("CameraRatio", "4:3"));
 
 	const cameraRef = useRef(null);
 
@@ -70,7 +70,7 @@ export default function CameraScreen(props) {
 	function cameraOptionChangeHandler(option, value){
 		switch(option){
 			case "type":
-				revertCameraHandler();
+				setCameraReverted(value);
 				break;
 			case "flashMode":
 				setFlashMode(value);
@@ -85,6 +85,7 @@ export default function CameraScreen(props) {
 				setVideoQuality(value);
 				break;
 			case "cameraRatio":
+				console.log("SET RATIO STATE ", value);
 				setCameraRatio(value);
 				break;
 		}
@@ -173,7 +174,7 @@ export default function CameraScreen(props) {
 						return -300;
 				}
 			case "CameraRatio":
-				return value === "16:9" ? 0 : 1;
+				return value === "4:3" ? 0 : 1;
 		}
 	}
 
@@ -252,15 +253,22 @@ export default function CameraScreen(props) {
 			]}>
 				<ScrollView>
 					<Text style={styles.textSettingsTitle}>Settings</Text>
-					{cameraSettings && Object.values(cameraSettings).map((setting, i) =>
-						<RadioGroup
-							key={Math.random()}
-							title={Object.keys(cameraSettings)[i]}
-							options={setting}
-							active={setting !== undefined ? valueToIndex(indexToParam(i), indexToState(i)) : 1}
-							onToggle={cameraOptionChangeHandler}
-						/>
-					)}
+					{cameraSettings && Object.values(cameraSettings).map((setting, i) => {
+						if (Object.keys(cameraSettings)[i] !== "CameraRatio")
+							return <RadioGroup
+								key={Math.random()}
+								title={Object.keys(cameraSettings)[i]}
+								options={setting}
+								active={setting !== undefined ? indexToState(i) : 1}
+								onToggle={cameraOptionChangeHandler}
+							/>
+						return <></>;
+					})}
+					<RadioGroup title={"CameraRatio"}
+								key={Math.random()}
+								options={cameraSettings.CameraRatio}
+								active={cameraRatio}
+								onToggle={cameraOptionChangeHandler}/>
 				</ScrollView>
 			</Animated.View>
 		</View>

@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export default function RadioButton(props) {
 	function toggleHandler(){
+		console.log('clicked on ', props.id);
 		props.onToggle(props.id);
 	}
 
