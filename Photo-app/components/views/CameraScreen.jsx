@@ -201,7 +201,7 @@ export default function CameraScreen(props) {
 	return (
 		<View style={styles.container}>
 			<StatusBar/>
-			<ExpoCamera.Camera style={{...styles.camera, aspectRatio: cameraRatio === "16:9" ? 9 / 16 : 3 / 4}}
+			<ExpoCamera.Camera style={{...styles.camera, aspectRatio: cameraRatio === 0 ? 3 / 4 : 9 / 16}}
 							   type={cameraReverted ?
 								   ExpoCamera.Camera.Constants.Type.front :
 								   ExpoCamera.Camera.Constants.Type.back}
