@@ -4,7 +4,17 @@ import RadioButton from "./RadioButton";
 import {useEffect, useState} from "react";
 
 export default function RadioGroup(props) {
-	if(props.title === "CameraRatio") console.log('props.active z gory', props.active);
+	if(props.title === "PictureSize") { console.log('props.options z gory', props.options); console.log("props.active", props.active);
+		// props.active = props.active.replaceAll(":", "x");
+		const temp = Object.values(props.options);
+		console.log('temp', temp);
+		let newOptions = {};
+		for(let i = 0; i < temp.length; i++){
+			newOptions[temp[i]] = temp[i];
+		}
+		console.log('newOptions', newOptions);
+		props.options = newOptions;
+	}
 	// props.active = props.active === undefined ? 1 : props.active;
 	// props.active = props.active === -300 ? 0 : props.active;
 	// let defValue = props.active;

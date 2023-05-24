@@ -36,6 +36,8 @@ export default function CameraScreen(props) {
 	const [whiteBalance, setWhiteBalance] = useState(valueToIndex("WhiteBalance", "incandescent"));
 	const [videoQuality, setVideoQuality] = useState(valueToIndex("VideoQuality", "4:3"));
 	const [cameraRatio, setCameraRatio] = useState(valueToIndex("CameraRatio", "4:3"));
+	const [pictureSize, setPictureSize] = useState(valueToIndex("PictureSize", "1920x1440"));
+	const [pictureSizesLoaded, setPictureSizesLoaded] = useState(false);
 
 	const cameraRef = useRef(null);
 
@@ -88,6 +90,9 @@ export default function CameraScreen(props) {
 				console.log("SET RATIO STATE ", value);
 				setCameraRatio(value);
 				break;
+			case "pictureSize":
+				setPictureSize(value);
+				break;
 		}
 	}
 	function indexToState(index){
@@ -104,6 +109,8 @@ export default function CameraScreen(props) {
 				return videoQuality;
 			case 5:
 				return cameraRatio;
+			case 6:
+				return pictureSize;
 		}
 	}
 	function indexToParam(index){
@@ -120,6 +127,8 @@ export default function CameraScreen(props) {
 				return "VideoQuality";
 			case 5:
 				return "CameraRatio";
+			case 6:
+				return "PictureSize";
 		}
 	}
 	function valueToIndex(param, value){
@@ -175,6 +184,8 @@ export default function CameraScreen(props) {
 				}
 			case "CameraRatio":
 				return value === "4:3" ? 0 : 1;
+			case "PictureSize":
+				return value;
 		}
 	}
 
@@ -210,15 +221,20 @@ export default function CameraScreen(props) {
 							   autoFocus={autoFocus}
 							   whiteBalance={whiteBalance}
 							   ratio={cameraRatio === 0 ? "4:3" : "16:9"}
+							   pictureSize={pictureSize}
 							   ref={cameraRef}
-							   onCameraReady={() =>
+							   onCameraReady={async () =>
 							   {
+								   const pictureSizes = await cameraRef.current.getAvailablePictureSizesAsync(cameraRatio === 0 ? "4:3" : "16:9");
 								   setCameraSettings(
 									   {
 										   ...ExpoCamera.Camera.Constants,
 										   "CameraRatio": CAMERA_RATIOS,
+										   "PictureSize": pictureSizes
 									   }
 								   );
+								   console.log(pictureSizes);
+									setPictureSizesLoaded(true);
 							   }}
 			/>
 
@@ -245,7 +261,7 @@ export default function CameraScreen(props) {
 			</TouchableOpacity>
 
 			{/* Camera settings */}
-			<Animated.View style={[
+			{ pictureSizesLoaded && <Animated.View style={[
 				styles.settingsWrapper,
 				{
 					transform: [{translateY: settingsWrapperOffset}]
@@ -254,7 +270,7 @@ export default function CameraScreen(props) {
 				<ScrollView>
 					<Text style={styles.textSettingsTitle}>Settings</Text>
 					{cameraSettings && Object.values(cameraSettings).map((setting, i) => {
-						if (Object.keys(cameraSettings)[i] !== "CameraRatio")
+						if (Object.keys(cameraSettings)[i] !== "CameraRatio" && Object.keys(cameraSettings)[i] !== "PictureSize")
 							return <RadioGroup
 								key={Math.random()}
 								title={Object.keys(cameraSettings)[i]}
@@ -269,8 +285,13 @@ export default function CameraScreen(props) {
 								options={cameraSettings.CameraRatio}
 								active={cameraRatio}
 								onToggle={cameraOptionChangeHandler}/>
+					<RadioGroup title={"PictureSize"}
+								key={Math.random()}
+								options={cameraSettings.PictureSize}
+								active={pictureSize}
+								onToggle={cameraOptionChangeHandler}/>
 				</ScrollView>
-			</Animated.View>
+			</Animated.View>}
 		</View>
 	);
 }
