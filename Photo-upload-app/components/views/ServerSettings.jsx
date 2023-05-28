@@ -1,18 +1,32 @@
 import {View, Text, StyleSheet} from 'react-native';
 import Dialog from "react-native-dialog";
 import * as SecureStore from "expo-secure-store";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 import Button from "../Button";
 
 export default function ServerSettings(){
 	const [dialogVisible, setDialogVisible] = useState(false);
-	let ip, port;
-	SecureStore.getItemAsync("IP").then(value => ip = value);
-	SecureStore.getItemAsync("Port").then(value => port = value);
+	const [ip, setIp] = useState('192.168.0.1');
+	const [port, setPort] = useState('3000');
+	// SecureStore.getItemAsync("IP").then(value => { if(value) setIp(value.toString()) });
+	// SecureStore.getItemAsync("Port").then(value => { if(value) console.log(value.toString()) });
 
-	function toggleDialogHandler() { setDialogVisible(previousState => !previousState); }
-	function saveSettingsHandler() {}
+	function toggleDialogHandler() {
+		console.log('toggling dialog');
+		setDialogVisible(previousState => !previousState); }
+	async function saveSettingsHandler() {
+		console.log('saving settings');
+		console.table(ip, port);
+		await SecureStore.setItemAsync("IP", ip.toString());
+		await SecureStore.setItemAsync("Port", port.toString());
+		toggleDialogHandler();
+	}
+
+	useEffect(() => {
+		SecureStore.getItemAsync("IP").then(value => { if(value) setIp(value) });
+		SecureStore.getItemAsync("Port").then(value => { if(value) setPort(value) });
+	}, []);
 
 	return (
 		<View style={styles.container}>
@@ -28,8 +42,8 @@ export default function ServerSettings(){
 				<Dialog.Description>
 					Enter new server data:
 				</Dialog.Description>
-				<Dialog.Input label="IP">{ip}</Dialog.Input>
-				<Dialog.Input label="Port">{port}</Dialog.Input>
+				<Dialog.Input label="IP" value={ip} onChangeText={value => setIp(value)}/>
+				<Dialog.Input label="Port" value={port} onChangeText={setPort}/>
 				<Dialog.Button label="Cancel" onPress={toggleDialogHandler} />
 				<Dialog.Button label="Save" onPress={saveSettingsHandler} />
 			</Dialog.Container>
