@@ -12,6 +12,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 const PORT = 3000;
 
 app.post('/upload', (req, res) => {
+	console.log('POST /upload');
 	const form = new formidable.IncomingForm({multiples: false, maxFileSize: 50 * 1024 * 1024, uploadDir: "./upload", keepExtensions: true});
 
 	form.parse(req, (err, fields, files) => {

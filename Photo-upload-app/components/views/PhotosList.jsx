@@ -12,6 +12,7 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
+import * as SecureStore from "expo-secure-store";
 import {useState, useEffect} from "react";
 
 import Button from "../Button";
@@ -83,17 +84,49 @@ export default function PhotosList(props) {
 			prevState.map(el => el.id === item.id ? item : el)
 		)
 	}
+
 	function toggleViewHandler() {
 		setGridView(prevState => !prevState);
 	}
+
 	async function deleteHandler() {
 		ExpoMediaLibrary.deleteAssetsAsync(photos.filter(el => el.selected))
 			.then(refreshPhotos)
 			.catch(error => console.log(error));
 	}
 
-	async function uploadSelectedHandler(){}
-	function setServerDataHandler(){
+	async function uploadSelectedHandler() {
+		let formData = new FormData();
+		photos.filter(el => el.selected).forEach(el => {
+			formData.append("photos", {
+				uri: el.uri,
+				type: "image/jpeg",
+				name: el.filename
+			});
+		});
+
+		refreshPhotos();
+
+		const ip = await SecureStore.getItemAsync("IP");
+		const port = await SecureStore.getItemAsync("Port");
+		console.log(formData);
+		fetch(`http://${ip}:${port}/upload`,
+			{
+				method: "POST",
+				body: formData
+			},
+			{
+				headers: {
+					"Content-Type": "multipart/form-data"
+				}
+			}
+		)
+			.then(response => response.json())
+			.then(data => ToastAndroid.show('Upload successful', ToastAndroid.LONG))
+			.catch(error => ToastAndroid.show('Upload unsuccessful', ToastAndroid.LONG));
+	}
+
+	function setServerDataHandler() {
 		props.navigation.navigate("ServerSettings");
 	}
 
@@ -157,7 +190,7 @@ export default function PhotosList(props) {
 							</Text>
 						</TouchableOpacity>
 					)}
-					keyExtractor={item => item.id}
+					keyExtractor={() => Math.random().toString()}
 					key={gridView ? "grid" : "list"}
 					numColumns={gridView ? 3 : 1}
 					contentContainerStyle={{justifyContent: 'space-between', alignItems: 'center'}}
