@@ -1,9 +1,30 @@
 import {View, Image, StyleSheet} from 'react-native';
 import * as ExpoMediaLibrary from 'expo-media-library';
 import * as ExpoSharing from 'expo-sharing';
+import * as ExpoSecureStore from "expo-secure-store";
 import Button from "../Button";
 
 export default function PhotoDetails(props) {
+	async function uploadPhotoHandler(){
+		// create form data from photo
+		const formData = new FormData();
+		formData.append('photo', {
+			uri: props.route.params.photo.uri,
+			type: 'image/jpeg',
+			name: 'photo.jpg'
+		});
+		const ip = await ExpoSecureStore.getItemAsync('IP');
+		const port = await ExpoSecureStore.getItemAsync('Port');
+		console.log(ip, port);
+		console.log(formData);
+		fetch(`http://${ip}:${port}/upload`, {
+			method: 'POST',
+			body: formData,
+		})
+			.then(response => response.json())
+			.then(data => console.log(data))
+			.catch(error => console.log(error));
+	}
 	async function sharePhotoHandler(){
 		if (await ExpoSharing.isAvailableAsync()) {
 			await ExpoSharing.shareAsync(props.route.params.photo.uri, {
@@ -25,6 +46,9 @@ export default function PhotoDetails(props) {
 				style={styles.image}
 			/>
 			<View style={styles.buttonsWrapper}>
+				<Button text="Upload"
+						onPress={uploadPhotoHandler}
+						{...styles.button}/>
 				<Button text="Share"
 						onPress={sharePhotoHandler}
 						{...styles.button}/>
