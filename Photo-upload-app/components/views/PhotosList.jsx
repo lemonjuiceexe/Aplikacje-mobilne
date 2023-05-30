@@ -12,7 +12,8 @@ import {
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {useIsFocused} from "@react-navigation/native";
 import * as ExpoMediaLibrary from 'expo-media-library';
-import * as SecureStore from "expo-secure-store";
+import * as ExpoSecureStore from "expo-secure-store";
+import * as ExpoImagePicker from "expo-image-picker";
 import {useState, useEffect} from "react";
 
 import Button from "../Button";
@@ -107,8 +108,8 @@ export default function PhotosList(props) {
 
 		refreshPhotos();
 
-		const ip = await SecureStore.getItemAsync("IP");
-		const port = await SecureStore.getItemAsync("Port");
+		const ip = await ExpoSecureStore.getItemAsync("IP");
+		const port = await ExpoSecureStore.getItemAsync("Port");
 		console.log(formData);
 		fetch(`http://${ip}:${port}/upload`,
 			{
@@ -125,7 +126,38 @@ export default function PhotosList(props) {
 			.then(data => ToastAndroid.show('Upload successful', ToastAndroid.LONG))
 			.catch(error => ToastAndroid.show('Upload unsuccessful', ToastAndroid.LONG));
 	}
-
+	async function uploadFromGalleryHandler() {
+		const status = await ExpoImagePicker.launchImageLibraryAsync({
+			mediaTypes: ExpoImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+		if (!status.cancelled){
+			let formData = new FormData();
+			formData.append("photos", {
+				uri: status.uri,
+				type: status.uri.split(".").pop() === "png" ? "image/png" : "image/jpeg",
+				name: status.filename + "." + status.uri.split(".").pop()
+			});
+			const ip = await ExpoSecureStore.getItemAsync("IP");
+			const port = await ExpoSecureStore.getItemAsync("Port");
+			fetch(`http://${ip}:${port}/upload`,
+				{
+					method: "POST",
+					body: formData
+				},
+				{
+					headers: {
+						"Content-Type": "multipart/form-data"
+					}
+				}
+			)
+				.then(response => response.json())
+				.then(data => ToastAndroid.show('Upload successful', ToastAndroid.LONG))
+				.catch(error => ToastAndroid.show('Upload unsuccessful', ToastAndroid.LONG));
+		}
+	}
 	function setServerDataHandler() {
 		props.navigation.navigate("ServerSettings");
 	}
@@ -157,11 +189,15 @@ export default function PhotosList(props) {
 					/>
 				</View>
 				<View style={styles.buttonContainerRow}>
-					<Button text="Upload selected"
+					<Button text="&#128246;"
 							{...styles.button}
 							onPress={uploadSelectedHandler}
 					/>
-					<Button text="Set server data"
+					<Button text="&#127800;"
+							{...styles.button}
+							onPress={uploadFromGalleryHandler}
+					/>
+					<Button text="&nbsp;&#9881;"
 							{...styles.button}
 							onPress={setServerDataHandler}
 					/>
@@ -228,7 +264,7 @@ const styles = StyleSheet.create({
 		height: "70%",
 		paddingHorizontal: 35,
 		paddingVertical: 5,
-		textHeight: '100%'
+		textHeight: '100%',
 	},
 	list: {
 		flex: 5,

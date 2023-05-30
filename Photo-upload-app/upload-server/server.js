@@ -5,7 +5,7 @@ const formidable = require('formidable');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
-const app = express()
+const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}));
 
@@ -23,6 +23,7 @@ app.post('/upload', (req, res) => {
 
 		// Handle the uploaded file
 		const imageFile = files.photo;
+		console.log('man some photo sick');
 
 		if (!imageFile) {
 			res.status(400).send('No file uploaded');

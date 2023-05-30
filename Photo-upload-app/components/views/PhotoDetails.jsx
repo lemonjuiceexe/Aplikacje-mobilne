@@ -46,13 +46,13 @@ export default function PhotoDetails(props) {
 				style={styles.image}
 			/>
 			<View style={styles.buttonsWrapper}>
-				<Button text="Upload"
+				<Button text="&#128246;"
 						onPress={uploadPhotoHandler}
 						{...styles.button}/>
-				<Button text="Share"
+				<Button text="&#128259;"
 						onPress={sharePhotoHandler}
 						{...styles.button}/>
-				<Button text="Delete"
+				<Button text="&#x1F5D1;"
 						onPress={deletePhotoHandler}
 						{...styles.button}/>
 			</View>
