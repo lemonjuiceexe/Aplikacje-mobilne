@@ -17,3 +17,4 @@ web-build/
 .metro-health-check*
 
 photo_manager_app/upload-server/upload/
+public/img/*
