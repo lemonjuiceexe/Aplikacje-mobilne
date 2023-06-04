@@ -60,6 +60,16 @@ app.post('/rename', (req, res) => {
 		res.status(200).send('File renamed');
 	});
 });
+app.post('/delete', (req, res) => {
+	req.body.names.forEach(name => {
+		fs.unlink(path.join(UPLOAD_DIR, name), err => {
+			if (err) {
+				res.status(400).send('Error deleting file');
+			}
+		});
+	});
+	res.status(200).send('Files deleted');
+});
 
 app.get('/fileNames', (req, res) => {
 	console.log('GET /files');
