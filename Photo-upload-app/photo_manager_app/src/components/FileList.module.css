@@ -1,0 +1,57 @@
+.list{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+/* Image element */
+.imageElement{
+    width: 200px;
+    height: 570px;
+    min-height: fit-content;
+    margin: 10px;
+    padding: 10px;
+    border: 2px solid black;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+.elementHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.photoTitle{
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    text-wrap: normal;
+    word-break: break-all;
+    cursor: pointer;
+}
+.checkbox{
+    width: 30px;
+    height: 30px;
+    margin: 0 15px;
+    cursor: pointer;
+}
+.image{
+    width: 100%;
+    border-radius: 10px;
+}
+.imageElementButton{
+    width: 100%;
+    margin: 5px 0;
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+    background-color: lavenderblush;
+}

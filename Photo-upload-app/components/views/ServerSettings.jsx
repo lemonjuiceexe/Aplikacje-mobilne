@@ -9,8 +9,8 @@ export default function ServerSettings(){
 	const [dialogVisible, setDialogVisible] = useState(false);
 	const [ip, setIp] = useState('192.168.0.1');
 	const [port, setPort] = useState('3000');
-	// SecureStore.getItemAsync("IP").then(value => { if(value) setIp(value.toString()) });
-	// SecureStore.getItemAsync("Port").then(value => { if(value) console.log(value.toString()) });
+	// ExpoSecureStore.getItemAsync("IP").then(value => { if(value) setIp(value.toString()) });
+	// ExpoSecureStore.getItemAsync("Port").then(value => { if(value) console.log(value.toString()) });
 
 	function toggleDialogHandler() {
 		console.log('toggling dialog');
