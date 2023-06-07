@@ -9,6 +9,7 @@ const MIN_INTERVAL = 400;
 export default function App() {
   const [lastSent, setLastSent] = useState(new Date());
   const [ws, setWs] = useState(null);
+  const [shouldSend, setShouldSend] = useState(false);
 
   const [{ x, y, z }, setData] = useState({
     x: 0,
@@ -37,7 +38,7 @@ export default function App() {
   useEffect(() => {
     if (subscription) {
       const now = new Date();
-      if (ws && ws.readyState === WebSocket.OPEN && now - lastSent > MIN_INTERVAL) {
+      if (ws && ws.readyState === WebSocket.OPEN && shouldSend && now - lastSent > MIN_INTERVAL) {
         console.log('sending' + now);
         setLastSent(now);
         ws.send(JSON.stringify({ x: x, y: y, z: z }));
@@ -75,6 +76,11 @@ export default function App() {
           <Text>Fast</Text>
         </TouchableOpacity>
       </View>
+	<View style={styles.buttonContainer}>
+		<TouchableOpacity onPress={() => setShouldSend(prevState => !prevState)} style={styles.button}>
+		  <Text>{shouldSend ? 'Currently sending' : 'Currently not sending'}</Text>
+		</TouchableOpacity>
+	</View>
     </View>
   );
 }
