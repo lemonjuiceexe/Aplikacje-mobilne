@@ -3,7 +3,7 @@ import {useState, useEffect} from "react";
 import FileList from "./components/FileList";
 
 import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.css';
 
 const IP = "http://localhost:4231";
 
@@ -13,6 +13,7 @@ function App() {
 	const [selectedNames, setSelectedNames] = useState([]);
 
 	function refreshFiles() {
+		setDataLoaded(false);
 		fetch(IP + '/fileNames', {
 			method: "GET"
 		})
@@ -49,6 +50,13 @@ function App() {
 			.then(data => refreshFiles())
 			.catch(error => refreshFiles());
 	}
+	function selectAllHandler() {
+		if(selectedNames.length === photos.length){
+			setSelectedNames([]);
+		} else {
+			setSelectedNames(photos);
+		}
+	}
 	async function deletePhotosHandler(photoNames){
 		console.log('delete');
 		fetch(IP + '/delete', {
@@ -68,9 +76,9 @@ function App() {
 
 	if(!dataLoaded)
 		return (
-		<div className="App">
-			<header className="App-header">
-				<img src={logo} className="App-logo" alt="logo" />
+		<div className={styles.App}>
+			<header className={styles.AppHeader}>
+				<img src={logo} className={styles['App-logo']} alt="logo" />
 				<p>
 					The photos are loading...
 				</p>
@@ -79,7 +87,13 @@ function App() {
 	);
 
 	return (
-		<div className="App">
+		<div className={styles.App}>
+			<div className={styles.buttonsWrapper}>
+				<button className={styles.button} onClick={refreshFiles}>Refresh</button>
+				<button className={styles.button} onClick={selectAllHandler}>
+					{photos.length === selectedNames.length ? 'Deselect all' : 'Select all'}</button>
+				<button className={styles.button} onClick={() => deletePhotosHandler(selectedNames)}>Delete selected</button>
+			</div>
 			<FileList photos={photos} selectedNames={selectedNames}
 					  onToggleSelectPhoto={toggleSelectPhotoHandler}
 					  onRenamePhoto={renamePhotoHandler}

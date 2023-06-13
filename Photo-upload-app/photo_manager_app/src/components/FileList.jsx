@@ -1,6 +1,6 @@
 import styles from './FileList.module.css';
 
-export default function FileList({ photos, selectedNames, onToggleSelectPhoto, onRenamePhoto, onDeletePhoto }){
+export default function FileList({photos, selectedNames, onToggleSelectPhoto, onRenamePhoto, onDeletePhoto}) {
 
 	return (
 		<div className={styles.list}>
@@ -19,16 +19,19 @@ export default function FileList({ photos, selectedNames, onToggleSelectPhoto, o
 							</label>
 						</div>
 						<img className={styles.image} src={`./img/${photo}`} alt="A photo from the server"/>
-						<button className={styles.imageElementButton}
-								onClick={() => onRenamePhoto(photo)}
-						>
-							Rename
-						</button>
-						<button className={styles.imageElementButton}
-								onClick={() => onDeletePhoto([photo])}
-						>
-							Delete
-						</button>
+						<div className={styles.buttonsWrapper}>
+							<button className={styles.imageElementButton}
+									onClick={() => onRenamePhoto(photo)}
+							>
+								Rename
+							</button>
+							<button className={styles.imageElementButton}
+									onClick={() => onDeletePhoto([photo])}
+							>
+								Delete
+							</button>
+						</div>
+
 					</div>
 				);
 			})}

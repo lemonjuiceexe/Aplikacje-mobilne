@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+.buttonsWrapper{
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.button{
+    width: 30%;
+    margin: 20px 0;
+    border: 2px solid black;
+    padding: 10px;
+    text-align: center;
+    background-color: lavenderblush;
+}

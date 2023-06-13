@@ -18,3 +18,4 @@ web-build/
 
 photo_manager_app/upload-server/upload/
 public/img/*
+photo_manager_app/public/img/*

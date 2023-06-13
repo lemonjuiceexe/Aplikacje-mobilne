@@ -36,16 +36,22 @@
     text-wrap: normal;
     word-break: break-all;
     cursor: pointer;
+    margin-left: 10px;
 }
 .checkbox{
     width: 30px;
-    height: 30px;
-    margin: 0 15px;
+    height: 100%;
     cursor: pointer;
 }
 .image{
     width: 100%;
     border-radius: 10px;
+}
+.buttonsWrapper{
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    width: 100%;
 }
 .imageElementButton{
     width: 100%;
