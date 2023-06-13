@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Accelerometer } from 'expo-sensors';
 
-const IP = '192.168.91.82';
+const IP = '192.168.0.30';
 const PORT = 8080;
-const MIN_INTERVAL = 400;
+const MIN_INTERVAL = 0;
 
 export default function App() {
   const [lastSent, setLastSent] = useState(new Date());
@@ -19,7 +19,7 @@ export default function App() {
   const [subscription, setSubscription] = useState(null);
 
   const _slow = () => Accelerometer.setUpdateInterval(1000);
-  const _fast = () => Accelerometer.setUpdateInterval(16);
+  const _fast = () => Accelerometer.setUpdateInterval(32);
 
   const _subscribe = () => {
     setSubscription(Accelerometer.addListener(setData));

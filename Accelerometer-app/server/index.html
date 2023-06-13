@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="data"></div>
+    <div class="box"></div>
+</body>
+<style>
+    *{
+        margin: 0; 
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+        width: 100vw;
+        height: 100vh;
+        position: relative;
+    }
+    .box{
+        position: absolute;
+        left: 0; top: 0;
+        width: 100px; height: 100px;
+        background-color: rgba(255, 0, 0, 1);
+        border-radius: 100%;
+    }
+</style>
+<script>
+    const newWs = new WebSocket(`ws://192.168.0.30:8080`);
+
+    const box = document.querySelector(".box");
+    box.style.left = 0; box.style.top = 0;
+    const TARGET_FPS = 60;
+    const box_size = 100;
+    const VELOCITY = 15;
+    let move_vector = {
+        x: 0,
+        y: 0
+    }
+    let max_x = window.innerWidth - box_size, max_y = window.innerHeight - box_size;
+
+    setInterval(() => {
+        // console.log('updating box with ' + parseInt(box.style.left) + move_vector.x * VELOCITY + 'px');
+        let pos_x = parseInt(box.style.left) + move_vector.y * VELOCITY;
+        let pos_y = parseInt(box.style.top) + move_vector.x * VELOCITY;
+        if(pos_x < 0) { pos_x = 0; move_vector.x = 0; }
+        if(pos_x > max_x) { pos_x = max_x; move_vector.x = 0; }
+        if(pos_y < 0) { pos_y = 0; move_vector.y = 0; }
+        if(pos_y > max_y) { pos_y = max_y; move_vector.y = 0; }
+        box.style.left = `${pos_x}px`;
+        box.style.top = `${pos_y}px`;
+        
+    }, 1000 / TARGET_FPS);
+
+    newWs.onerror = (e) => {
+      console.log(e.message);
+    };
+    newWs.onclose = (e) => {
+      console.log(e.code, e.reason);
+    };
+
+    newWs.onmessage = (e) => {
+        let parsed = JSON.parse(e.data);
+        move_vector.x = parsed.x.toFixed(2);
+        move_vector.y = parsed.y.toFixed(2);
+
+        const data = document.querySelector('.data');
+        data.innerHTML = `x: ${parsed.x.toFixed(4)}, y: ${parsed.y.toFixed(4)}, z: ${parsed.z.toFixed(4)}`;
+    };
+    newWs.onclose = (e) => {
+        console.log(e.code, e.reason);
+    };
+</script>
+</html>

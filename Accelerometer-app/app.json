@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Register-app",
-    "slug": "Register-app",
+    "name": "Accelerometer-app",
+    "slug": "Accelerometer-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
